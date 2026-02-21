@@ -4,18 +4,21 @@ import Header from "./Header";
 
 const Main = () => {
   return (
-    <div className="flex text-start min-h-screen">
-      <div className="">
+    <div className="flex min-h-screen bg-[#F8F9FA]">
+      {/* Fixed Sidebar with exactly 300px width */}
+      <div className="w-[300px] flex-shrink-0">
         <Sidebar />
       </div>
-      <div className="flex-1 pl-[280px]">
-        <div className="sticky top-0 w-full z-10 p-4 pb-0 mb-4 bg-white/30 backdrop-blur-md border-b border-white/30">
+
+      {/* Main Content Area */}
+      <div className="flex-1">
+        {/* Header wrapper with proper spacing */}
+        <div className="py-2 px-2 sticky top-0 z-40 bg-[#F8F9FA]/80 backdrop-blur-sm">
           <Header />
         </div>
-        {/* <div className="bg-[#E6E6FF] w-full px-6 py-2 mt-1 mb-5">
-          <h2 className="text-blue-600 text-lg font-semibold">Over View</h2>
-        </div> */}
-        <div className="p-[24px] pt-5">
+        
+        {/* Page Content */}
+        <div className="px-8 pb-10">
           <Outlet />
         </div>
       </div>

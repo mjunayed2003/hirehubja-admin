@@ -8,6 +8,7 @@ import ForgotPassword from "../pages/Auth/ForgotPassword";
 import VerifyEmail from "../pages/Auth/VerifyEmail";
 import ResetPassword from "../pages/Auth/ResetPassword";
 import AdminRoutes from "./AdminRoutes";
+import NotFound from "../pages/NotFound/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -45,11 +46,12 @@ const router = createBrowserRouter([
         path: "/auth/reset-password",
         element: <ResetPassword />,
       },
+      
     ],
   },
   {
     path: "*",
-    //   element: <NotFound />,
+      element: <NotFound />,
   },
 ]);
 
