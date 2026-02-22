@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { dashboardItems } from "../../constants/router.constants"; // সরাসরি ইমপোর্ট করা হলো
+import { dashboardItems } from "../../constants/router.constants";
 import { MdArrowRight } from "react-icons/md";
 import { cn } from "../../lib/utils";
 import logo from '../../assets/image/logo.svg'; 
@@ -9,7 +9,6 @@ const Sidebar = () => {
   const location = useLocation();
   const [openMenu, setOpenMenu] = useState("");
 
-  // অটোমেটিক ড্রপডাউন ওপেন রাখার লজিক
   useEffect(() => {
     const activeItem = dashboardItems.find(item => 
       item.rootPath && location.pathname.includes(item.rootPath)
@@ -20,7 +19,7 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   return (
-    <div className="fixed top-0 left-0 w-[280px] h-screen bg-white shadow-[2px_0_10px_rgba(0,0,0,0.03)] flex flex-col z-50">
+    <div className="fixed top-0 left-0 w-[345px] h-screen bg-white shadow-[2px_0_10px_rgba(0,0,0,0.03)] flex flex-col z-50">
       {/* Logo Area */}
       <div className="h-[160px] flex items-center justify-center mt-4">
         <img src={logo} alt="HireHubJA" className="w-36 h-auto object-contain" />
@@ -29,12 +28,10 @@ const Sidebar = () => {
       {/* Nav Items Container */}
       <div className="flex-1 overflow-y-auto hide-scrollbar pb-10">
         <ul className="space-y-0.5"> 
-          {/* যেগুলোতে name আছে শুধু সেগুলোই দেখাবে (Hidden route বাদ যাবে) */}
           {dashboardItems.filter(item => item.name).map((item, indx) => {
               
               const hasChildren = item.children && item.children.length > 0;
               
-              // পারফেক্ট অ্যাক্টিভ চেকিং লজিক
               const isActive = item.rootPath 
                 ? location.pathname.includes(item.rootPath) 
                 : location.pathname === item.path;

@@ -1,4 +1,11 @@
 import DashboardHome from "../pages/Main/DashboardHome/DashboardHome";
+import Interviews from "../pages/Main/Interviews/Interviews";
+import JobPosts from "../pages/Main/JobPosts/JobPosts";
+import PaymentsEscrow from "../pages/Main/PaymentsEscrow/PaymentsEscrow";
+import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
+import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
+import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
+import UserManagement from "../pages/Main/Users/UserManagement";
 
 export const dashboardItems = [
   {
@@ -10,30 +17,30 @@ export const dashboardItems = [
     name: "User Approvals",
     rootPath: "user-approvals",
     children: [
-      { name: "Job Seekers", path: "/user-approvals/job-seekers", element: <div>Job Seekers Page</div> },
-      { name: "Employers", path: "/user-approvals/employers", element: <div>Employers Page</div> },
-      { name: "Companies", path: "/user-approvals/companies", element: <div>Companies Page</div> },
+      { name: "Job Seekers", path: "/user-approvals/job-seekers", element: <JobSeekerApprovals />},
+      { name: "Employers", path: "/user-approvals/employers", element: <EmployeeApprovals /> },
+      { name: "Companies", path: "/user-approvals/companies", element: <CompanyApprovals /> },
     ],
   },
   {
     name: "User",
     path: "/user",
-    element: <div>User Page</div>,
+    element: <UserManagement />,
   },
   {
     name: "Job Posts",
     path: "/job-posts",
-    element: <div>Job Posts Page</div>,
+    element: <JobPosts />,
   },
   {
     name: "Interviews",
     path: "/interviews",
-    element: <div>Interviews Page</div>,
+    element: <Interviews />,
   },
   {
     name: "Payments & Escrow",
     path: "/payments",
-    element: <div>Payments Page</div>,
+    element: <PaymentsEscrow />,
   },
   {
     name: "Categories",

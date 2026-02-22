@@ -6,7 +6,7 @@ const Main = () => {
   return (
     <div className="flex min-h-screen bg-[#F8F9FA]">
       {/* Fixed Sidebar with exactly 300px width */}
-      <div className="w-[300px] flex-shrink-0">
+      <div className="w-[345px] flex-shrink-0">
         <Sidebar />
       </div>
 
