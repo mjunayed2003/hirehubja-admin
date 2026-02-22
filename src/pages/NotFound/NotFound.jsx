@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import errorBg from '../../assets/image/404.svg'; // আপনার ইমেজের পাথ দিন
+import errorBg from '../../assets/image/404.svg';
 
 const NotFound = () => {
     const navigate = useNavigate();

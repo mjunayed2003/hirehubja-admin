@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar, Badge } from "antd";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { RiSettings4Line } from "react-icons/ri";
-import profileImage from "../../assets/images/admin.png";
+import profileImage from "../../assets/image/profile.png";
 import { useSelector } from "react-redux";
 
 const Header = () => {
