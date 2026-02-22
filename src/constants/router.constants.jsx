@@ -3,7 +3,10 @@ import DashboardHome from "../pages/Main/DashboardHome/DashboardHome";
 import Interviews from "../pages/Main/Interviews/Interviews";
 import JobPosts from "../pages/Main/JobPosts/JobPosts";
 import PaymentsEscrow from "../pages/Main/PaymentsEscrow/PaymentsEscrow";
-import ProfilePage from "../pages/Main/ProfilePage/ProfilePage";
+import AboutUs from "../pages/Main/Setting/AboutUs";
+import PrivacyPolicy from "../pages/Main/Setting/PrivacyPolicy";
+import ProfilePage from "../pages/Main/Setting/ProfilePage";
+import TermsAndCondition from "../pages/Main/Setting/TermsAndCondition";
 import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
 import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
 import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
@@ -64,9 +67,9 @@ export const dashboardItems = [
     rootPath: "settings",
     children: [
       { name: "Profile", path: "/settings/profile", element: <ProfilePage /> },
-      { name: "Terms & Condition", path: "/settings/terms-condition", element: <div>Terms Page</div> },
-      { name: "Privacy Policy", path: "/settings/privacy-policy", element: <div>Privacy Page</div> },
-      { name: "About Us", path: "/settings/about-us", element: <div>About Us Page</div> },
+      { name: "Terms & Condition", path: "/settings/terms-condition", element: <TermsAndCondition /> },
+      { name: "Privacy Policy", path: "/settings/privacy-policy", element: <PrivacyPolicy /> },
+      { name: "About Us", path: "/settings/about-us", element: <AboutUs /> },
     ],
   },
 ];
