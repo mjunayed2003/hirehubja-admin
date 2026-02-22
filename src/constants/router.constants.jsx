@@ -1,3 +1,4 @@
+import CategoriesPage from "../pages/Main/CategoriesPage/CategoriesPage";
 import DashboardHome from "../pages/Main/DashboardHome/DashboardHome";
 import Interviews from "../pages/Main/Interviews/Interviews";
 import JobPosts from "../pages/Main/JobPosts/JobPosts";
@@ -45,7 +46,7 @@ export const dashboardItems = [
   {
     name: "Categories",
     path: "/categories",
-    element: <div>Categories Page</div>,
+    element: <CategoriesPage />,
   },
   {
     name: "Subscriptions",

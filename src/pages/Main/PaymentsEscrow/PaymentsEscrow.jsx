@@ -19,7 +19,7 @@ const PaymentsEscrow = () => {
 
   // --- PAGINATION STATE ---
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -67,7 +67,7 @@ const PaymentsEscrow = () => {
       <div>
         <div className="flex justify-between items-center mb-6 border-b border-dashed border-gray-200 pb-4">
           {/* Title as per screenshot */}
-          <h2 className="text-xl font-bold text-gray-800">Job Posts</h2>
+          <h2 className="text-xl font-bold text-gray-800">Payments & Escrow</h2>
           
           {/* Dropdown */}
           <div className="relative group">
@@ -149,7 +149,7 @@ const PaymentsEscrow = () => {
       </div>
 
       {/* --- PAGINATION SECTION --- */}
-      <div className="pt-6 border-t border-gray-100 flex items-center justify-between lg:justify-end gap-8 bg-white mt-4">
+      <div className="pt-6 border-t border-gray-100 flex items-center justify-center gap-8 bg-white mt-4">
         
         {/* Previous Button */}
         <button 
