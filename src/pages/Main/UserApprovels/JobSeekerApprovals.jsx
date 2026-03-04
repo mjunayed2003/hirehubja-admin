@@ -68,7 +68,7 @@ const JobSeekerApprovals = () => {
                 <th className="py-4 px-6 font-medium">Email</th>
                 <th className="py-4 px-6 font-medium">Registration Date</th>
                 <th className="py-4 px-6 font-medium">Category</th>
-                <th className="py-4 px-6 font-medium text-center">Status</th>
+                <th className="py-4 px-6 font-medium text-center">Verification Status</th>
                 <th className="py-4 px-6 font-medium text-center">View Details</th>
                 <th className="py-4 px-6 font-medium text-center">Action</th>
               </tr>

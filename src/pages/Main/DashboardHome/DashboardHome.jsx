@@ -3,9 +3,12 @@ import EarningsChart from "../../../Components/dashboardHome/EarningsChart";
 import { useGetDashboardQuery } from "../../../redux/features/Dashboard/dashboardApi";
 import userIcon from "../../../assets/image/total.svg";
 
-// Import your components properly
-import RegistrationApprovalRequests from "../../../Components/dashboardHome/RegistrationTable"; 
-import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails"; // The new file from Step 1
+// Components Import
+import RegistrationApprovalRequests from "../../../Components/dashboardHome/RequestJobseeker"; 
+import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails"; 
+// New Components
+import InterviewScheduled from "../../../Components/dashboardHome/Interviewscheduled";
+import InterviewDetails from "../../../Components/dashboardHome/InterviewDetails";
 
 const currentYear = new Date().getFullYear();
 
@@ -13,8 +16,11 @@ const DashboardHome = () => {
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
 
-  // --- NEW STATE: This controls the Full Page View ---
+  // --- STATE 1: Controls Job Seeker Details Page ---
   const [viewData, setViewData] = useState(null);
+
+  // --- STATE 2: Controls Interview Details Page ---
+  const [viewInterview, setViewInterview] = useState(null);
 
   const { data: overallData } = useGetDashboardQuery({
     recentLimit: 20,
@@ -23,16 +29,7 @@ const DashboardHome = () => {
   });
 
   const totalUsers = overallData?.data?.totalUsers ?? 120;
-  // ... (Other variables: totalProvider, appBalance, etc.)
   const earningChart = overallData?.data?.earningChart ?? [];
-
-  // Interview Scheduled Table Data (Mock)
-  const interviewScheduled = [
-     { title: "Senior sales Executive", seeker: "bepary", employer: "Mercedes", date: "12.00 PM, 01.02.2026", status: "Scheduled" },
-     { title: "Senior sales Executive", seeker: "bepary", employer: "Mercedes", date: "12.00 PM, 01.02.2026", status: "Scheduled" },
-     { title: "Senior sales Executive", seeker: "bepary", employer: "Mercedes", date: "12.00 PM, 01.02.2026", status: "Scheduled" },
-     // ... add more mock data
-  ];
 
   const homeStatus = [
     { title: "Total Job Seekers", amount: totalUsers, icon: userIcon, percentage: "4% (30 days)" },
@@ -49,7 +46,7 @@ const DashboardHome = () => {
     </div>
   );
 
-  // --- LOGIC: If a user is selected, ONLY show the details page ---
+  // --- CONDITION 1: If viewing a Job Seeker Details ---
   if (viewData) {
     return (
       <div className="p-4 bg-[#F8F9FD] min-h-screen">
@@ -61,7 +58,19 @@ const DashboardHome = () => {
     );
   }
 
-  // --- OTHERWISE: Show the normal Dashboard ---
+  // --- CONDITION 2: If viewing an Interview Details ---
+  if (viewInterview) {
+    return (
+      <div className="p-4 bg-[#F8F9FD] min-h-screen">
+         <InterviewDetails 
+            interview={viewInterview} 
+            onBack={() => setViewInterview(null)} 
+         />
+      </div>
+    );
+  }
+
+  // --- DEFAULT: Show the Dashboard Home ---
   return (
     <div className="space-y-6 bg-[#F8F9FD] p-4 font-sans text-[#1A1A1A]">
       
@@ -110,46 +119,10 @@ const DashboardHome = () => {
       </div>
 
       {/* Table 1: Registration Requests */}
-      {/* Pass the setViewData function here */}
       <RegistrationApprovalRequests onView={(user) => setViewData(user)} />
 
-      {/* Table 2: Interview Scheduled */}
-      <div className="bg-white rounded-xl p-6 shadow-sm">
-        <div className="border-b border-dashed border-gray-200 mb-6 pb-4 flex justify-between items-center">
-            <h3 className="text-lg font-bold">Interview Scheduled</h3>
-            <button className="px-4 py-1.5 border border-gray-200 rounded text-sm text-gray-600">See all</button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="text-xs text-gray-500 border-b border-dashed border-gray-200">
-                <th className="font-medium py-3">Job Title</th>
-                <th className="font-medium py-3">Job Seeker Name</th>
-                <th className="font-medium py-3">Employer / Company</th>
-                <th className="font-medium py-3">Interview Date & Time</th>
-                <th className="font-medium py-3 text-center">Status</th>
-                <th className="font-medium py-3 text-center">View Details</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm text-gray-700">
-              {interviewScheduled.map((row, idx) => (
-                <tr key={idx} className="border-b border-gray-50 hover:bg-gray-50">
-                  <td className="py-4">{row.title}</td>
-                  <td className="py-4">{row.seeker}</td>
-                  <td className="py-4">{row.employer}</td>
-                  <td className="py-4">{row.date}</td>
-                  <td className="py-4 text-center">
-                    <span className="bg-[#FFF4E3] text-[#F39C12] px-4 py-1 rounded-full text-xs font-medium">{row.status}</span>
-                  </td>
-                  <td className="py-4 text-center">
-                    <button className="bg-gray-200 text-gray-700 px-4 py-1 rounded text-xs font-medium hover:bg-gray-300">View</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Table 2: Interview Scheduled (NEW) */}
+      <InterviewScheduled onView={(interview) => setViewInterview(interview)} />
 
     </div>
   );

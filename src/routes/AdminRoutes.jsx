@@ -7,7 +7,6 @@ const AdminRoutes = ({ children }) => {
   const location = useLocation();
   const { user, isLoading } = useSelector((state) => state.auth);
 
-  // ✅ DEV MODE BYPASS (backend off থাকলে)
   if (import.meta.env.VITE_DEV_BYPASS_AUTH === "true") {
     return children;
   }
