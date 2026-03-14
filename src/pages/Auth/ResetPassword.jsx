@@ -2,13 +2,12 @@ import { Button, Input } from "antd";
 import Form from "antd/es/form/Form";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useResetPasswordMutation } from "../../redux/features/Auth/authApi";
 import Swal from "sweetalert2";
-import logo from "../../assets/image/logo.svg";
+import logo from "../../assets/images/logo.svg";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const isLoading = false;
   const [showSuccess, setShowSuccess] = useState(false);
 
   const onFinish = async (values) => {

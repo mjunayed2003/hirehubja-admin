@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import errorBg from '../../assets/image/404.svg';
+import errorBg from '../../assets/images/404.svg';
 
 const NotFound = () => {
     const navigate = useNavigate();

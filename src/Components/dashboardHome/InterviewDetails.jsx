@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Picture from "../../assets/image/profile.png";
+import Picture from "../../assets/images/profile.png";
 
 const candidateData = {
   name: "Sowrove Bepary",

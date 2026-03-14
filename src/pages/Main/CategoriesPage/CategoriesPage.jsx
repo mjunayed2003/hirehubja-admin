@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaCheck } from "react-icons/fa";
 import { MdOutlineFileUpload, MdClose, MdAdd } from "react-icons/md";
-import Education_img from "../../../assets/image/education.jpg";
+import Education_img from "../../../assets/images/education.jpg";
 
 const CategoriesContent = () => {
     // State for Modal

@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import EarningsChart from "../../../Components/dashboardHome/EarningsChart";
-import { useGetDashboardQuery } from "../../../redux/features/Dashboard/dashboardApi";
-import userIcon from "../../../assets/image/total.svg";
-
-// Components Import
-import RegistrationApprovalRequests from "../../../Components/dashboardHome/RequestJobseeker"; 
-import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails"; 
-// New Components
+import userIcon from "../../../assets/images/total.svg";
+import RegistrationApprovalRequests from "../../../Components/dashboardHome/RequestJobseeker";
+import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails";
 import InterviewScheduled from "../../../Components/dashboardHome/Interviewscheduled";
 import InterviewDetails from "../../../Components/dashboardHome/InterviewDetails";
 
@@ -15,21 +11,12 @@ const currentYear = new Date().getFullYear();
 const DashboardHome = () => {
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-
-  // --- STATE 1: Controls Job Seeker Details Page ---
   const [viewData, setViewData] = useState(null);
-
-  // --- STATE 2: Controls Interview Details Page ---
   const [viewInterview, setViewInterview] = useState(null);
 
-  const { data: overallData } = useGetDashboardQuery({
-    recentLimit: 20,
-    year: selectedYear,
-    month: selectedMonth,
-  });
-
-  const totalUsers = overallData?.data?.totalUsers ?? 120;
-  const earningChart = overallData?.data?.earningChart ?? [];
+  // Dummy data (redux বাদ)
+  const totalUsers = 120;
+  const earningChart = [];
 
   const homeStatus = [
     { title: "Total Job Seekers", amount: totalUsers, icon: userIcon, percentage: "4% (30 days)" },
@@ -46,35 +33,24 @@ const DashboardHome = () => {
     </div>
   );
 
-  // --- CONDITION 1: If viewing a Job Seeker Details ---
   if (viewData) {
     return (
       <div className="p-4 bg-[#F8F9FD] min-h-screen">
-         <RegistrationDetails 
-            user={viewData} 
-            onBack={() => setViewData(null)} 
-         />
+        <RegistrationDetails user={viewData} onBack={() => setViewData(null)} />
       </div>
     );
   }
 
-  // --- CONDITION 2: If viewing an Interview Details ---
   if (viewInterview) {
     return (
       <div className="p-4 bg-[#F8F9FD] min-h-screen">
-         <InterviewDetails 
-            interview={viewInterview} 
-            onBack={() => setViewInterview(null)} 
-         />
+        <InterviewDetails interview={viewInterview} onBack={() => setViewInterview(null)} />
       </div>
     );
   }
 
-  // --- DEFAULT: Show the Dashboard Home ---
   return (
     <div className="space-y-6 bg-[#F8F9FD] p-4 font-sans text-[#1A1A1A]">
-      
-      {/* Top Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {homeStatus.map((item, idx) => (
           <div key={idx} className="bg-white rounded-xl p-6 shadow-sm flex items-center space-x-4">
@@ -92,7 +68,6 @@ const DashboardHome = () => {
         ))}
       </div>
 
-      {/* Middle Section: Pie & Earning */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <div className="xl:col-span-5 bg-white rounded-xl p-6 shadow-sm">
           <h3 className="text-lg font-bold mb-6">Pie Chart</h3>
@@ -118,12 +93,8 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      {/* Table 1: Registration Requests */}
       <RegistrationApprovalRequests onView={(user) => setViewData(user)} />
-
-      {/* Table 2: Interview Scheduled (NEW) */}
       <InterviewScheduled onView={(interview) => setViewInterview(interview)} />
-
     </div>
   );
 };

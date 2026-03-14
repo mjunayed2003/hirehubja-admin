@@ -4,12 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import OTPInput from "react-otp-input";
 import Swal from "sweetalert2";
-import {
-  useVerifyEmailMutation,
-  useLazyResendOTPQuery,
-} from "../../redux/features/Auth/authApi";
-// Imported as requested
-import logo from "../../assets/image/logo.svg"; 
+import logo from "../../assets/images/logo.svg"; 
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
@@ -17,8 +12,8 @@ const VerifyEmail = () => {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(60);
 
-  const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
-  const [triggerResendOTP, { isLoading: resendLoading }] = useLazyResendOTPQuery();
+  const isLoading = false;
+  const resendLoading = false;
 
   const [otpExpire, setOtpExpire] = useState(() => {
     const storedExpire = sessionStorage.getItem("otpExpire");
