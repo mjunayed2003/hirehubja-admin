@@ -1,0 +1,70 @@
+import { baseApi } from "../../api/baseApi";
+
+const usersApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    // GET /admin/users  (with filters: role, status, search, page, limit)
+    getUsers: builder.query({
+      query: (params = {}) => {
+        const query = new URLSearchParams();
+        if (params.role)   query.set("role", params.role);
+        if (params.status) query.set("status", params.status);
+        if (params.search) query.set("search", params.search);
+        if (params.page)   query.set("page", params.page);
+        if (params.limit)  query.set("limit", params.limit);
+        return `/admin/users?${query.toString()}`;
+      },
+      providesTags: ["users"],
+    }),
+
+    // GET /admin/users/:id
+    getUserById: builder.query({
+      query: (id) => `/admin/users/${id}`,
+      providesTags: ["users"],
+    }),
+
+    // PATCH /admin/users/:id/approve
+    approveUser: builder.mutation({
+      query: (id) => ({
+        url: `/admin/users/${id}/approve`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["users", "dashboard"],
+    }),
+
+    // PATCH /admin/users/:id/reject
+    rejectUser: builder.mutation({
+      query: (id) => ({
+        url: `/admin/users/${id}/reject`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["users", "dashboard"],
+    }),
+
+    // PATCH /admin/users/:id/block
+    blockUser: builder.mutation({
+      query: (id) => ({
+        url: `/admin/users/${id}/block`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+    // DELETE /admin/users/:id
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/admin/users/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["users"],
+    }),
+  }),
+});
+
+export const {
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useApproveUserMutation,
+  useRejectUserMutation,
+  useBlockUserMutation,
+  useDeleteUserMutation,
+} = usersApi;

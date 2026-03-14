@@ -1,32 +1,62 @@
 import React, { useState } from "react";
 import EarningsChart from "../../../Components/dashboardHome/EarningsChart";
 import userIcon from "../../../assets/images/total.svg";
-import RegistrationApprovalRequests from "../../../Components/dashboardHome/RequestJobseeker";
 import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails";
-import InterviewScheduled from "../../../Components/dashboardHome/Interviewscheduled";
 import InterviewDetails from "../../../Components/dashboardHome/InterviewDetails";
-
-const currentYear = new Date().getFullYear();
+import RegistrationApprovalRequests from "../../../Components/dashboardHome/RequestJobseeker";
+import InterviewScheduled from "../../../Components/dashboardHome/Interviewscheduled";
+import {
+  useGetDashboardStatsQuery,
+  useGetPieChartQuery,
+  useGetEarningsQuery,
+} from "../../../redux/features/dashboard/dashboardApi";
 
 const DashboardHome = () => {
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [earningPeriod, setEarningPeriod] = useState("yearly");
   const [viewData, setViewData] = useState(null);
   const [viewInterview, setViewInterview] = useState(null);
 
-  // Dummy data (redux বাদ)
-  const totalUsers = 120;
-  const earningChart = [];
+  // ─── API Calls ───────────────────────────────────────────────
+  const { data: statsData } = useGetDashboardStatsQuery();
+  const { data: pieData } = useGetPieChartQuery();
+  const { data: earningsData } = useGetEarningsQuery(earningPeriod);
+
+  const stats = statsData?.data || {};
+  const pieChart = pieData?.data || {};
+const earningChart = earningsData?.data?.chart || [];
 
   const homeStatus = [
-    { title: "Total Job Seekers", amount: totalUsers, icon: userIcon, percentage: "4% (30 days)" },
-    { title: "Total Employers", amount: 120, icon: userIcon, percentage: "4% (30 days)" },
-    { title: "Total Companies", amount: 120, icon: userIcon, percentage: "4% (30 days)" },
-    { title: "Active Job Posts", amount: 120, icon: userIcon, percentage: "4% (30 days)" },
+    {
+      title: "Total Job Seekers",
+      amount: stats.totalJobSeekers?.count ?? stats.totalJobSeekers ?? 0,
+      icon: userIcon,
+      percentage: `${stats.totalJobSeekers?.growthPercent ?? 4}% (30 days)`
+    },
+    {
+      title: "Total Employers",
+      amount: stats.totalEmployers?.count ?? stats.totalEmployers ?? 0,
+      icon: userIcon,
+      percentage: `${stats.totalEmployers?.growthPercent ?? 4}% (30 days)`
+    },
+    {
+      title: "Total Companies",
+      amount: stats.totalCompanies?.count ?? stats.totalCompanies ?? 0,
+      icon: userIcon,
+      percentage: `${stats.totalCompanies?.growthPercent ?? 4}% (30 days)`
+    },
+    {
+      title: "Active Job Posts",
+      amount: stats.activeJobPosts?.count ?? stats.activeJobPosts ?? 0,
+      icon: userIcon,
+      percentage: `${stats.activeJobPosts?.growthPercent ?? 4}% (30 days)`
+    },
   ];
 
   const PieRing = ({ percentage, color }) => (
-    <div className="relative flex items-center justify-center w-32 h-32 rounded-full" style={{ background: `conic-gradient(${color} ${percentage}%, #F3F4F6 0)` }}>
+    <div
+      className="relative flex items-center justify-center w-32 h-32 rounded-full"
+      style={{ background: `conic-gradient(${color} ${percentage}%, #F3F4F6 0)` }}
+    >
       <div className="absolute w-16 h-16 bg-white rounded-full flex items-center justify-center">
         <span className="text-xl font-bold text-gray-800">{percentage}%</span>
       </div>
@@ -51,6 +81,8 @@ const DashboardHome = () => {
 
   return (
     <div className="space-y-6 bg-[#F8F9FD] p-4 font-sans text-[#1A1A1A]">
+
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {homeStatus.map((item, idx) => (
           <div key={idx} className="bg-white rounded-xl p-6 shadow-sm flex items-center space-x-4">
@@ -68,33 +100,42 @@ const DashboardHome = () => {
         ))}
       </div>
 
+      {/* Pie Chart & Earnings */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <div className="xl:col-span-5 bg-white rounded-xl p-6 shadow-sm">
           <h3 className="text-lg font-bold mb-6">Pie Chart</h3>
           <div className="border-b border-dashed border-gray-200 mb-8"></div>
           <div className="flex justify-between items-center px-2">
             <div className="flex flex-col items-center gap-4">
-              <PieRing percentage={81} color="#FF5B5B" />
-              <span className="text-sm font-medium text-gray-600">Job seeker</span>
+              <PieRing percentage={pieChart.jobSeeker?.percentage ?? 0} color="#FF5B5B" />
+              <span className="text-sm font-medium text-gray-600">Job Seeker</span>
             </div>
             <div className="flex flex-col items-center gap-4">
-              <PieRing percentage={22} color="#00B074" />
+              <PieRing percentage={pieChart.employer?.percentage ?? 0} color="#00B074" />
               <span className="text-sm font-medium text-gray-600">Employer</span>
             </div>
             <div className="flex flex-col items-center gap-4">
-              <PieRing percentage={62} color="#2D9CDB" />
+              <PieRing percentage={pieChart.company?.percentage ?? 0} color="#2D9CDB" />
               <span className="text-sm font-medium text-gray-600">Companies</span>
             </div>
           </div>
         </div>
 
         <div className="xl:col-span-7">
-          <EarningsChart earningChart={earningChart} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+          <EarningsChart
+            earningChart={earningChart}
+            period={earningPeriod}
+            onPeriodChange={setEarningPeriod}
+          />
         </div>
       </div>
 
+      {/* Registration Approval Requests */}
       <RegistrationApprovalRequests onView={(user) => setViewData(user)} />
+
+      {/* Interview Scheduled */}
       <InterviewScheduled onView={(interview) => setViewInterview(interview)} />
+
     </div>
   );
 };
