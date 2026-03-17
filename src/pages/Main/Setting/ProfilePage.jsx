@@ -6,7 +6,7 @@ import {
   selectCurrentUser, selectCurrentToken, setLogin,
   useGetProfileQuery, useUpdateProfileMutation,
   useChangePasswordMutation, useForgotPasswordMutation,
-  useResetPasswordMutation,
+  useResetPasswordMutation, useVerifyOtpMutation,
 } from "../../../redux/features/Auth/authSlice";
 import toast from "react-hot-toast";
 import profile from "../../../assets/images/profile.png";
@@ -26,14 +26,13 @@ const UserProfileSettings = () => {
     fullName: "", email: "", phone: "", location: "",
   });
 
-  // ─── API Hooks ───────────────────────────────────────────────
   const { data: profileData, isLoading } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
   const [changePassword, { isLoading: isChangingPass }] = useChangePasswordMutation();
   const [forgotPassword, { isLoading: isSendingOtp }] = useForgotPasswordMutation();
+  const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
   const [resetPassword, { isLoading: isResetting }] = useResetPasswordMutation();
 
-  // ─── Profile data populate ───────────────────────────────────
   useEffect(() => {
     const data = profileData?.data || user;
     if (data) {
@@ -44,7 +43,7 @@ const UserProfileSettings = () => {
         location: data.location || "",
       });
       if (data.profilePic && !data.profilePic.includes("undefined")) {
-        const base = import.meta.env.VITE_SERVER_URL.replace(/\/$/, "");
+        const base = import.meta.env.VITE_SERVER_URL?.replace(/\/$/, "");
         setProfileImage(`${base}${data.profilePic}`);
       }
     }
@@ -71,9 +70,7 @@ const UserProfileSettings = () => {
       if (imageFile) fd.append("profilePic", imageFile);
 
       const res = await updateProfile(fd).unwrap();
-      const updatedUser = res?.data
-        ? { ...user, ...res.data }
-        : { ...user, fullName: formData.fullName };
+      const updatedUser = res?.data ? { ...user, ...res.data } : { ...user, fullName: formData.fullName };
       dispatch(setLogin({ user: updatedUser, token }));
       toast.success("Profile updated successfully!");
       setIsEditing(false);
@@ -122,7 +119,7 @@ const UserProfileSettings = () => {
                   onClick={() => { setIsEditing(!isEditing); setImageFile(null); }}
                   className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition flex justify-center items-center gap-2 ${isEditing ? "bg-red-50 text-red-500 border border-red-200" : "bg-[#EAEAEA] hover:bg-gray-300 text-gray-600"}`}
                 >
-                  {isEditing ? <>Cancel</> : <><MdEdit size={14} /> Edit Profile</>}
+                  {isEditing ? "Cancel" : <><MdEdit size={14} /> Edit Profile</>}
                 </button>
               </div>
             </div>
@@ -148,44 +145,40 @@ const UserProfileSettings = () => {
         </div>
       </div>
 
-      {/* MODAL */}
+      {/* MODALS */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-[500px] rounded-2xl shadow-2xl p-8 relative">
 
-            {/* 1. CHANGE PASSWORD */}
             {activeModal === 'changePass' && (
               <ChangePasswordModal
                 onBack={closeModal}
-                onForgot={() => setActiveModal('forgot')}
+                onForgot={() => setActiveModal({ name: 'forgot' })}
                 changePassword={changePassword}
                 isLoading={isChangingPass}
                 onClose={closeModal}
               />
             )}
 
-            {/* 2. FORGOT PASSWORD */}
-            {activeModal === 'forgot' && (
+            {activeModal?.name === 'forgot' && (
               <ForgotPasswordModal
                 onBack={() => setActiveModal('changePass')}
                 forgotPassword={forgotPassword}
                 isLoading={isSendingOtp}
-                onNext={(email) => {
-                  setActiveModal({ name: 'otp', email });
-                }}
+                onNext={(email) => setActiveModal({ name: 'otp', email })}
               />
             )}
 
-            {/* 3. VERIFY OTP */}
             {activeModal?.name === 'otp' && (
               <OtpModal
-                onBack={() => setActiveModal('forgot')}
+                onBack={() => setActiveModal({ name: 'forgot' })}
                 email={activeModal.email}
+                verifyOtp={verifyOtp}
+                isLoading={isVerifying}
                 onNext={(otp) => setActiveModal({ name: 'reset', email: activeModal.email, otp })}
               />
             )}
 
-            {/* 4. RESET PASSWORD */}
             {activeModal?.name === 'reset' && (
               <ResetPasswordModal
                 onBack={() => setActiveModal({ name: 'otp', email: activeModal.email })}
@@ -258,9 +251,7 @@ const ForgotPasswordModal = ({ onBack, forgotPassword, isLoading, onNext }) => {
       <div className="relative mb-8">
         <FaRegEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg" />
         <input
-          type="email"
-          placeholder="Enter your Email"
-          value={email}
+          type="email" placeholder="Enter your Email" value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full pl-12 pr-4 py-3.5 bg-[#F9FAFB] rounded-lg text-sm outline-none border border-transparent focus:border-[#43B948] transition"
         />
@@ -271,7 +262,7 @@ const ForgotPasswordModal = ({ onBack, forgotPassword, isLoading, onNext }) => {
 };
 
 // ─── OTP Modal ───────────────────────────────────────────────────
-const OtpModal = ({ onBack, email, onNext }) => {
+const OtpModal = ({ onBack, email, verifyOtp, isLoading, onNext }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
   const handleChange = (value, index) => {
@@ -284,10 +275,16 @@ const OtpModal = ({ onBack, email, onNext }) => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const otpString = otp.join("");
     if (otpString.length < 6) return toast.error("Please enter complete OTP");
-    onNext(otpString);
+    try {
+      await verifyOtp({ otp: otpString }).unwrap();
+      toast.success("OTP verified!");
+      onNext(otpString);
+    } catch (error) {
+      toast.error(error?.data?.message || "Invalid OTP");
+    }
   };
 
   return (
@@ -298,16 +295,13 @@ const OtpModal = ({ onBack, email, onNext }) => {
       <div className="flex justify-between gap-3 mb-8">
         {otp.map((digit, i) => (
           <input
-            key={i}
-            id={`otp-${i}`}
-            maxLength={1}
-            value={digit}
+            key={i} id={`otp-${i}`} maxLength={1} value={digit}
             onChange={(e) => handleChange(e.target.value, i)}
             className="w-12 h-12 bg-[#F9FAFB] rounded-lg text-center text-lg font-bold text-gray-700 outline-none border border-transparent focus:border-[#43B948] transition"
           />
         ))}
       </div>
-      <ActionButton text="Verify" onClick={handleVerify} />
+      <ActionButton text={isLoading ? "Verifying..." : "Verify"} onClick={handleVerify} disabled={isLoading} />
     </>
   );
 };
@@ -359,8 +353,10 @@ const PasswordInput = ({ placeholder, label, name, value, onChange }) => {
       {label && <label className="block text-gray-800 text-sm font-medium mb-2">{label}</label>}
       <div className="relative">
         <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-        <input type={show ? "text" : "password"} placeholder={placeholder} name={name} value={value} onChange={onChange}
-          className="w-full pl-10 pr-10 py-3.5 bg-[#F9FAFB] rounded-lg text-sm outline-none border border-transparent focus:border-[#43B948] transition" />
+        <input
+          type={show ? "text" : "password"} placeholder={placeholder} name={name} value={value} onChange={onChange}
+          className="w-full pl-10 pr-10 py-3.5 bg-[#F9FAFB] rounded-lg text-sm outline-none border border-transparent focus:border-[#43B948] transition"
+        />
         <button type="button" onClick={() => setShow(!show)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
           {show ? <FaEyeSlash /> : <FaEye />}
         </button>

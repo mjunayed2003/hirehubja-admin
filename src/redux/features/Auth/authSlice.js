@@ -100,6 +100,16 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
+
+    // POST /auth/forgot-password/verify-otp
+    verifyOtp: builder.mutation({
+      query: (data) => ({
+        url: "/auth/forgot-password/verify-otp",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
   }),
 });
 
@@ -110,4 +120,5 @@ export const {
   useChangePasswordMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useVerifyOtpMutation,
 } = authApi;

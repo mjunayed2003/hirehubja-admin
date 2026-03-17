@@ -16,39 +16,38 @@ const DashboardHome = () => {
   const [viewData, setViewData] = useState(null);
   const [viewInterview, setViewInterview] = useState(null);
 
-  // ─── API Calls ───────────────────────────────────────────────
   const { data: statsData } = useGetDashboardStatsQuery();
   const { data: pieData } = useGetPieChartQuery();
   const { data: earningsData } = useGetEarningsQuery(earningPeriod);
 
   const stats = statsData?.data || {};
   const pieChart = pieData?.data || {};
-const earningChart = earningsData?.data?.chart || [];
+  const earningChart = earningsData?.data?.chart || [];
 
   const homeStatus = [
     {
-      title: "Total Job Seekers",
-      amount: stats.totalJobSeekers?.count ?? stats.totalJobSeekers ?? 0,
+      title: stats.totalJobSeekers?.label || "Total Job Seekers",
+      amount: stats.totalJobSeekers?.count ?? 0,
       icon: userIcon,
-      percentage: `${stats.totalJobSeekers?.growthPercent ?? 4}% (30 days)`
+      percentage: `${stats.totalJobSeekers?.growthPercent ?? 0}% (30 days)`,
     },
     {
-      title: "Total Employers",
-      amount: stats.totalEmployers?.count ?? stats.totalEmployers ?? 0,
+      title: stats.totalEmployers?.label || "Total Employers",
+      amount: stats.totalEmployers?.count ?? 0,
       icon: userIcon,
-      percentage: `${stats.totalEmployers?.growthPercent ?? 4}% (30 days)`
+      percentage: `${stats.totalEmployers?.growthPercent ?? 0}% (30 days)`,
     },
     {
-      title: "Total Companies",
-      amount: stats.totalCompanies?.count ?? stats.totalCompanies ?? 0,
+      title: stats.totalCompanies?.label || "Total Companies",
+      amount: stats.totalCompanies?.count ?? 0,
       icon: userIcon,
-      percentage: `${stats.totalCompanies?.growthPercent ?? 4}% (30 days)`
+      percentage: `${stats.totalCompanies?.growthPercent ?? 0}% (30 days)`,
     },
     {
-      title: "Active Job Posts",
-      amount: stats.activeJobPosts?.count ?? stats.activeJobPosts ?? 0,
+      title: stats.activeJobPosts?.label || "Active Job Posts",
+      amount: stats.activeJobPosts?.count ?? 0,
       icon: userIcon,
-      percentage: `${stats.activeJobPosts?.growthPercent ?? 4}% (30 days)`
+      percentage: `${stats.activeJobPosts?.growthPercent ?? 0}% (30 days)`,
     },
   ];
 
@@ -108,15 +107,15 @@ const earningChart = earningsData?.data?.chart || [];
           <div className="flex justify-between items-center px-2">
             <div className="flex flex-col items-center gap-4">
               <PieRing percentage={pieChart.jobSeeker?.percentage ?? 0} color="#FF5B5B" />
-              <span className="text-sm font-medium text-gray-600">Job Seeker</span>
+              <span className="text-sm font-medium text-gray-600">{pieChart.jobSeeker?.label || "Job Seeker"}</span>
             </div>
             <div className="flex flex-col items-center gap-4">
               <PieRing percentage={pieChart.employer?.percentage ?? 0} color="#00B074" />
-              <span className="text-sm font-medium text-gray-600">Employer</span>
+              <span className="text-sm font-medium text-gray-600">{pieChart.employer?.label || "Employer"}</span>
             </div>
             <div className="flex flex-col items-center gap-4">
               <PieRing percentage={pieChart.company?.percentage ?? 0} color="#2D9CDB" />
-              <span className="text-sm font-medium text-gray-600">Companies</span>
+              <span className="text-sm font-medium text-gray-600">{pieChart.company?.label || "Companies"}</span>
             </div>
           </div>
         </div>
