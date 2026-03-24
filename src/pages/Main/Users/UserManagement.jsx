@@ -4,14 +4,14 @@ import {
   useBlockUserMutation,
   usePendingUserMutation 
 } from "../../../redux/features/users/usersApi";
-import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails";
+import UserDetails from "./userDetails";
 import toast from "react-hot-toast";
 
 const UserManagement = () => {
-  const[selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [role, setRole] = useState("JOB_SEEKER");
-  const[search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const itemsPerPage = 10;
 
@@ -54,7 +54,7 @@ const UserManagement = () => {
   // ─── Detail View ─────────────────────────────────────────────
   if (selectedUser) {
     return (
-      <RegistrationDetails
+      <UserDetails
         user={selectedUser}
         onBack={() => setSelectedUser(null)}
         onActionDone={refetch}
