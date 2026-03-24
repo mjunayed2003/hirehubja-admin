@@ -13,9 +13,12 @@ const Header = () => {
   const user = useSelector(selectCurrentUser);
 
 
-const avatarSrc = user?.profilePic && !user.profilePic.includes("undefined")
-  ? `${import.meta.env.VITE_SERVER_URL.replace(/\/$/, "")}${user.profilePic}`
-  : profileImage;
+  const baseUrl = import.meta.env.VITE_SERVER_URL || "";
+
+  const avatarSrc =
+    user?.profilePic && !user.profilePic.includes("undefined")
+      ? `${baseUrl.replace(/\/$/, "")}${user.profilePic}`
+      : profileImage;
 
   return (
     <div className="w-full h-[80px] bg-white border border-gray-200 rounded-xl px-10 flex justify-between items-center shadow-sm">
