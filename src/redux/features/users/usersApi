@@ -2,7 +2,6 @@ import { baseApi } from "../../api/baseApi";
 
 const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // GET /admin/users  (with filters: role, status, search, page, limit)
     getUsers: builder.query({
       query: (params = {}) => {
         const query = new URLSearchParams();
@@ -16,22 +15,19 @@ const usersApi = baseApi.injectEndpoints({
       providesTags: ["users"],
     }),
 
-    // GET /admin/users/:id
     getUserById: builder.query({
       query: (id) => `/admin/users/${id}`,
       providesTags: ["users"],
     }),
 
-    // PATCH /admin/users/:id/approve
     approveUser: builder.mutation({
       query: (id) => ({
         url: `/admin/users/${id}/approve`,
         method: "PATCH",
       }),
-      invalidatesTags: ["users", "dashboard"],
+      invalidatesTags:["users", "dashboard"],
     }),
 
-    // PATCH /admin/users/:id/reject
     rejectUser: builder.mutation({
       query: (id) => ({
         url: `/admin/users/${id}/reject`,
@@ -40,7 +36,6 @@ const usersApi = baseApi.injectEndpoints({
       invalidatesTags: ["users", "dashboard"],
     }),
 
-    // PATCH /admin/users/:id/block
     blockUser: builder.mutation({
       query: (id) => ({
         url: `/admin/users/${id}/block`,
@@ -49,7 +44,14 @@ const usersApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
-    // DELETE /admin/users/:id
+    pendingUser: builder.mutation({
+      query: (id) => ({
+        url: `/admin/users/${id}/pending`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["users"],
+    }),
+
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `/admin/users/${id}`,
@@ -66,5 +68,6 @@ export const {
   useApproveUserMutation,
   useRejectUserMutation,
   useBlockUserMutation,
+  usePendingUserMutation,
   useDeleteUserMutation,
 } = usersApi;

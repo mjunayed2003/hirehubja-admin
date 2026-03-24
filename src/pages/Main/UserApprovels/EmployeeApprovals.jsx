@@ -1,147 +1,302 @@
-// components/EmployeeApprovals.jsx
+// components/EmployerApprovals.jsx
 import React, { useState } from "react";
-import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails"; // Path may vary based on your folder structure
+import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails";
+import {
+  useGetUsersQuery,
+  useApproveUserMutation,
+  useRejectUserMutation,
+} from "../../../redux/features/users/usersApi";
+import toast from "react-hot-toast";
 
-const EmployeeApprovals = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
-  
-  // Pagination States
+const STATUS_OPTIONS = ["All", "PENDING", "ACTIVE", "REJECTED", "BLOCKED"];
+const ITEMS_PER_PAGE = 12;
+
+const EmployerApprovals = () => {
+  const[selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const [statusFilter, setStatusFilter] = useState("PENDING");
+  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
 
-  // Mock Data (18 Entries)
-  const [users, setUsers] = useState([
-    { id: 1, name: "Rahim Ahmed", email: "rahim@work.com", date: "21.10.2026", category: "Management", status: "Pending" },
-    { id: 2, name: "Karim Uddin", email: "karim@shop.com", date: "25.10.2026", category: "Sales", status: "Pending" },
-    { id: 3, name: "Salma Khatun", email: "salma@tech.com", date: "26.10.2026", category: "HR", status: "Pending" },
-    { id: 4, name: "John Smith", email: "john@corp.com", date: "27.10.2026", category: "Marketing", status: "Pending" },
-    { id: 5, name: "Alice Doe", email: "alice@design.com", date: "28.10.2026", category: "Design", status: "Pending" },
-    { id: 6, name: "Robert Brown", email: "robert@dev.com", date: "29.10.2026", category: "Development", status: "Pending" },
-    { id: 7, name: "Emily White", email: "emily@finance.com", date: "30.10.2026", category: "Finance", status: "Pending" },
-    { id: 8, name: "Michael Green", email: "michael@ops.com", date: "31.10.2026", category: "Operations", status: "Pending" },
-    { id: 9, name: "Sarah Black", email: "sarah@legal.com", date: "01.11.2026", category: "Legal", status: "Pending" },
-    { id: 10, name: "David Wilson", email: "david@support.com", date: "02.11.2026", category: "Support", status: "Pending" },
-    { id: 11, name: "Lisa Ray", email: "lisa@admin.com", date: "03.11.2026", category: "Admin", status: "Pending" },
-    { id: 12, name: "Tom Hardy", email: "tom@sales.com", date: "04.11.2026", category: "Sales", status: "Pending" },
-    { id: 13, name: "Jerry Rice", email: "jerry@it.com", date: "05.11.2026", category: "IT", status: "Pending" },
-    { id: 14, name: "Monica Geller", email: "monica@chef.com", date: "06.11.2026", category: "Hospitality", status: "Pending" },
-    { id: 15, name: "Ross Geller", email: "ross@science.com", date: "07.11.2026", category: "Research", status: "Pending" },
-    { id: 16, name: "Rachel Green", email: "rachel@fashion.com", date: "08.11.2026", category: "Fashion", status: "Pending" },
-    { id: 17, name: "Chandler Bing", email: "chandler@stats.com", date: "09.11.2026", category: "Analysis", status: "Pending" },
-    { id: 18, name: "Joey Tribbiani", email: "joey@actor.com", date: "10.11.2026", category: "Entertainment", status: "Pending" },
-  ]);
+  // ─── API Calls ───────────────────────────────────────────────
+  const queryParams = {
+    role: "EMPLOYER", // Updated to EMPLOYER
+    page: currentPage,
+    limit: ITEMS_PER_PAGE,
+    ...(statusFilter !== "All" && { status: statusFilter }),
+    ...(search && { search }),
+  };
 
-  // Pagination Logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const { data, isLoading, isFetching } = useGetUsersQuery(queryParams);
+  const[approveUser, { isLoading: isApproving }] = useApproveUserMutation();
+  const [rejectUser, { isLoading: isRejecting }] = useRejectUserMutation();
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const users = data?.data ||[];
+  const total = data?.meta?.total || 0;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE) || 1;
+
+  // ─── Handlers ────────────────────────────────────────────────
+  const handleApprove = async (userId, e) => {
+    e.stopPropagation();
+    try {
+      await approveUser(userId).unwrap();
+      toast.success("Employer approved successfully!");
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to approve");
+    }
+  };
+
+  const handleDecline = async (userId, e) => {
+    e.stopPropagation();
+    try {
+      await rejectUser(userId).unwrap();
+      toast.success("Employer rejected!");
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to reject");
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = (status) => {
+    setStatusFilter(status);
+    setCurrentPage(1);
+  };
 
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
   };
 
   const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    if (currentPage > 1) setCurrentPage((p) => p - 1);
   };
 
-  const handleStatus = (id, newStatus) => {
-    setUsers(users.map(user => user.id === id ? { ...user, status: newStatus } : user));
-  };
+  // ─── Detail View ─────────────────────────────────────────────
+  if (selectedUser) {
+    return (
+      <RegistrationDetails
+        user={selectedUser}
+        onBack={() => setSelectedUser(null)}
+        onActionDone={() => setSelectedUser(null)}
+      />
+    );
+  }
 
-  if (selectedUser) return <RegistrationDetails user={selectedUser} onBack={() => setSelectedUser(null)} />;
+  // ─── Status Badge Helper ─────────────────────────────────────
+  const statusStyle = (status) => {
+    const map = {
+      PENDING: { bg: "#FFF4E3", color: "#F39C12" },
+      ACTIVE: { bg: "#E7F8EE", color: "#00B074" },
+      REJECTED: { bg: "#FFEEEE", color: "#FF5B5B" },
+      BLOCKED: { bg: "#F3F4F6", color: "#6B7280" },
+    };
+    return map[status] || { bg: "#F3F4F6", color: "#6B7280" };
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-h-[600px] flex flex-col justify-between">
+      
+      {/* ── Header ── */}
       <div>
-        <div className="p-6 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-800">Employee Registration Requests</h2>
+        <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <h2 className="text-xl font-bold text-gray-800">
+            Employer Registration Requests
+          </h2>
+
+          {/* Search + Filter */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search by name..."
+                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-green-400 w-44"
+              />
+              <button
+                type="submit"
+                className="bg-[#43B948] text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-green-600 transition"
+              >
+                Search
+              </button>
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setSearchInput("");
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs text-gray-400 hover:text-red-500 transition"
+                >
+                  ✕ Clear
+                </button>
+              )}
+            </form>
+
+            {/* Status Filter */}
+            <select
+              value={statusFilter}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-green-400 bg-white"
+            >
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s === "All" ? "All Status" : s}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* ── Table ── */}
+        <div className="overflow-x-auto relative">
+          {/* Loading overlay */}
+          {(isLoading || isFetching) && (
+            <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+
           <table className="w-full text-left border-collapse">
             <thead className="bg-white text-gray-500 text-xs border-b border-gray-200">
               <tr>
-                <th className="py-4 px-6 font-medium">Name</th>
+                <th className="py-4 px-6 font-medium">Employer Name</th>
                 <th className="py-4 px-6 font-medium">Email</th>
                 <th className="py-4 px-6 font-medium">Registration Date</th>
-                <th className="py-4 px-6 font-medium">Department</th>
+                <th className="py-4 px-6 font-medium">Department/Industry</th>
                 <th className="py-4 px-6 font-medium text-center">Status</th>
                 <th className="py-4 px-6 font-medium text-center">Details</th>
                 <th className="py-4 px-6 font-medium text-center">Action</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-700 divide-y divide-gray-50">
-              {currentItems.map((row) => (
-                <tr key={row.id} className="hover:bg-[#FAFAFA] transition">
-                  <td className="py-4 px-6 font-medium">{row.name}</td>
-                  <td className="py-4 px-6 text-gray-600">{row.email}</td>
-                  <td className="py-4 px-6 text-gray-600">{row.date}</td>
-                  <td className="py-4 px-6 text-gray-600">{row.category}</td>
-                  <td className="py-4 px-6 text-center">
-                    <span className={`px-4 py-1 rounded-full text-xs font-semibold ${
-                      row.status === 'Pending' ? 'bg-[#FFF4E3] text-[#F39C12]' : 
-                      row.status === 'Approved' ? 'bg-[#E7F8EE] text-[#00B074]' : 'bg-[#FFEEEE] text-[#FF5B5B]'
-                    }`}>{row.status}</span>
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    <button onClick={() => setSelectedUser(row)} className="bg-[#EAEAEA] text-[#4B5563] px-6 py-1.5 rounded text-xs font-bold hover:bg-gray-300">View</button>
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {row.status === 'Pending' ? (
-                      <div className="flex justify-center gap-2">
-                        <button onClick={() => handleStatus(row.id, 'Approved')} className="bg-[#E7F8EE] text-[#00B074] px-4 py-1.5 rounded text-xs font-bold hover:bg-green-600 hover:text-white transition">Approve</button>
-                        <button onClick={() => handleStatus(row.id, 'Declined')} className="bg-[#FFEEEE] text-[#FF5B5B] px-4 py-1.5 rounded text-xs font-bold hover:bg-red-500 hover:text-white transition">Decline</button>
-                      </div>
-                    ) : <span className="text-xs text-gray-400">Completed</span>}
+              {!isLoading && users.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-gray-400 text-sm italic">
+                    No employers found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                users.map((row) => {
+                  const { bg, color } = statusStyle(row.status);
+                  const createdAt = row.createdAt
+                    ? new Date(row.createdAt).toLocaleDateString("en-GB")
+                    : "—";
+
+                  return (
+                    <tr key={row.id} className="hover:bg-[#FAFAFA] transition">
+                      <td className="py-4 px-6 font-medium">
+                        {row.employerProfile?.fullName || row.fullName || "—"}
+                      </td>
+                      <td className="py-4 px-6 text-gray-600">{row.email}</td>
+                      <td className="py-4 px-6 text-gray-600">{createdAt}</td>
+                      <td className="py-4 px-6 text-gray-600">
+                        {row.employerProfile?.department || row.employerProfile?.industry || "—"}
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <span
+                          className="px-4 py-1 rounded-full text-xs font-semibold"
+                          style={{ backgroundColor: bg, color }}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <button
+                          onClick={() => setSelectedUser(row)}
+                          className="bg-[#EAEAEA] text-[#4B5563] px-6 py-1.5 rounded text-xs font-bold hover:bg-gray-300 transition"
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        {row.status === "PENDING" ? (
+                          <div className="flex justify-center gap-2">
+                            <button
+                              onClick={(e) => handleApprove(row.id, e)}
+                              disabled={isApproving || isRejecting}
+                              className="bg-[#E7F8EE] text-[#00B074] px-4 py-1.5 rounded text-xs font-bold hover:bg-green-600 hover:text-white transition disabled:opacity-50"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={(e) => handleDecline(row.id, e)}
+                              disabled={isApproving || isRejecting}
+                              className="bg-[#FFEEEE] text-[#FF5B5B] px-4 py-1.5 rounded text-xs font-bold hover:bg-red-500 hover:text-white transition disabled:opacity-50"
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">Completed</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Pagination Footer */}
-      <div className="p-4 border-t border-gray-100 flex items-center justify-center  gap-12 bg-white">
-        
-        {/* Previous Button */}
-        <button 
-          onClick={handlePrev} 
-          disabled={currentPage === 1}
-          className="flex items-center gap-2 px-6 py-2 bg-[#E7F8EE] text-gray-600 text-sm font-medium rounded hover:bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
-        >
-          <span>←</span> Previous
-        </button>
+      {/* ── Pagination Footer ── */}
+      <div className="p-4 border-t border-gray-100 flex items-center justify-between bg-white flex-wrap gap-3">
+        {/* Result count */}
+        <span className="text-xs text-gray-400">
+          {total > 0
+            ? `Showing ${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
+                currentPage * ITEMS_PER_PAGE,
+                total
+              )} of ${total}`
+            : "No results"}
+        </span>
 
-        {/* Page Numbers */}
-        <div className="flex gap-4 text-sm font-medium text-gray-500">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-            <button
-              key={number}
-              onClick={() => paginate(number)}
-              className={`${
-                currentPage === number ? "text-[#43B948] font-bold" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              {number < 10 ? `0${number}` : number}
-            </button>
-          ))}
+        <div className="flex items-center gap-8">
+          {/* Previous */}
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className="flex items-center gap-2 px-6 py-2 bg-[#E7F8EE] text-gray-600 text-sm font-medium rounded hover:bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            ← Previous
+          </button>
+
+          {/* Page Numbers */}
+          <div className="flex gap-3 text-sm font-medium text-gray-500">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+              <button
+                key={number}
+                onClick={() => setCurrentPage(number)}
+                className={
+                  currentPage === number
+                    ? "text-[#43B948] font-bold"
+                    : "text-gray-500 hover:text-gray-700"
+                }
+              >
+                {number < 10 ? `0${number}` : number}
+              </button>
+            ))}
+          </div>
+
+          {/* Next */}
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="flex items-center gap-2 px-6 py-2 bg-[#43B948] text-white text-sm font-medium rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
+          >
+            Next Page →
+          </button>
         </div>
-
-        {/* Next Page Button */}
-        <button 
-          onClick={handleNext}
-          disabled={currentPage === totalPages}
-          className="flex items-center gap-2 px-6 py-2 bg-[#43B948] text-white text-sm font-medium rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
-        >
-          Next Page <span>→</span>
-        </button>
       </div>
-
     </div>
   );
 };
 
-export default EmployeeApprovals;
+export default EmployerApprovals;

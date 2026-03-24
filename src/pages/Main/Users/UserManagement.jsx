@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { useGetUsersQuery, useBlockUserMutation } from "../../../redux/features/users/usersApi";
+import { 
+  useGetUsersQuery, 
+  useBlockUserMutation,
+  usePendingUserMutation 
+} from "../../../redux/features/users/usersApi";
 import RegistrationDetails from "../../../Components/dashboardHome/RegistrationDetails";
 import toast from "react-hot-toast";
 
 const UserManagement = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
+  const[selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [role, setRole] = useState("JOB_SEEKER");
-  const [search, setSearch] = useState("");
+  const[search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const itemsPerPage = 10;
 
+  // ─── API Calls ───────────────────────────────────────────────
   const { data, isLoading, refetch } = useGetUsersQuery({
     role,
     search,
@@ -19,17 +24,25 @@ const UserManagement = () => {
   });
 
   const [blockUser] = useBlockUserMutation();
+  const [pendingUser] = usePendingUserMutation();
 
-  const users = data?.data || [];
-  const totalPages = data?.meta?.totalPages || 1;
+  const users = data?.data ||[];
+  const total = data?.meta?.total || 0;
+  const totalPages = Math.ceil(total / itemsPerPage) || 1;
 
-  const handleBlock = async (id, isBlocked) => {
+  // ─── Handlers ────────────────────────────────────────────────
+  const handleToggleBlock = async (id, currentStatus) => {
     try {
-      await blockUser(id).unwrap();
-      toast.success(isBlocked ? "User unblocked!" : "User blocked!");
+      if (currentStatus === "BLOCKED") {
+        await pendingUser(id).unwrap();
+        toast.success("User unblocked and moved to Pending status!");
+      } else {
+        await blockUser(id).unwrap();
+        toast.success("User blocked successfully!");
+      }
       refetch();
-    } catch {
-      toast.error("Action failed");
+    } catch (error) {
+      toast.error(error?.data?.message || "Action failed. Check API endpoint.");
     }
   };
 
@@ -38,7 +51,7 @@ const UserManagement = () => {
     setCurrentPage(1);
   };
 
-  // View details page
+  // ─── Detail View ─────────────────────────────────────────────
   if (selectedUser) {
     return (
       <RegistrationDetails
@@ -102,7 +115,7 @@ const UserManagement = () => {
                   <th className="py-4 px-6 font-medium">Name</th>
                   <th className="py-4 px-6 font-medium">Email</th>
                   <th className="py-4 px-6 font-medium">Registration Date</th>
-                  <th className="py-4 px-6 font-medium">Category</th>
+                  <th className="py-4 px-6 font-medium">Role</th>
                   <th className="py-4 px-6 font-medium text-center">Status</th>
                   <th className="py-4 px-6 font-medium text-center">View</th>
                   <th className="py-4 px-6 font-medium text-center">Action</th>
@@ -111,13 +124,15 @@ const UserManagement = () => {
               <tbody className="text-sm text-gray-700 divide-y divide-gray-50">
                 {users.length > 0 ? users.map((user) => (
                   <tr key={user.id} className="hover:bg-[#FAFAFA] transition">
-                    <td className="py-4 px-6 font-medium">{user.fullName || "-"}</td>
+                    <td className="py-4 px-6 font-medium">
+                      {user.fullName || user.jobSeekerProfile?.fullName || user.employerProfile?.fullName || user.companyProfile?.companyName || "-"}
+                    </td>
                     <td className="py-4 px-6 text-gray-600">{user.email}</td>
                     <td className="py-4 px-6 text-gray-600">
-                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}
+                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString("en-GB") : "-"}
                     </td>
                     <td className="py-4 px-6 text-gray-600">
-                      {user.categories?.length > 0 ? user.categories.join(", ") : "-"}
+                      {user.role || "-"}
                     </td>
                     <td className="py-4 px-6 text-center">
                       <span className={`px-4 py-1 rounded-full text-xs font-semibold ${
@@ -140,7 +155,7 @@ const UserManagement = () => {
                     </td>
                     <td className="py-4 px-6 text-center">
                       <button
-                        onClick={() => handleBlock(user.id, user.status === "BLOCKED")}
+                        onClick={() => handleToggleBlock(user.id, user.status)}
                         className={`px-6 py-1.5 rounded-full text-xs font-bold transition min-w-[80px] ${
                           user.status === "BLOCKED"
                             ? "bg-[#EAEAEA] text-[#4B5563] hover:bg-gray-300"

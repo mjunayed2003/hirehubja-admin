@@ -3,22 +3,27 @@ import { useGetUserByIdQuery, useApproveUserMutation, useRejectUserMutation } fr
 import defaultPic from "../../assets/images/profile.png";
 import toast from "react-hot-toast";
 
-// ─── Image Modal ─────────────────────────────────────────────────
-const ImageModal = ({ url, title, onClose }) => (
+// ─── Image/File Modal ─────────────────────────────────────────────────
+const FileModal = ({ url, title, onClose }) => (
   <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div className="bg-white w-full max-w-3xl rounded-xl flex flex-col shadow-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+    {/* max-h-[90vh] added to prevent the modal from exceeding the screen height */}
+    <div className="bg-white w-full max-w-3xl rounded-xl flex flex-col shadow-2xl overflow-hidden max-h-[90vh]">
+      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center shrink-0">
         <h3 className="text-lg font-bold text-gray-800">{title}</h3>
         <button onClick={onClose} className="text-gray-400 hover:text-red-500 text-3xl leading-none">&times;</button>
       </div>
+      
+      {/* overflow-y-auto added here for scrollability if the image is too tall */}
       <div className="flex-1 overflow-y-auto bg-gray-100 flex justify-center p-6">
-        {url?.endsWith(".pdf") ? (
-          <iframe src={url} className="w-full min-h-[600px]" title={title} />
+        {url?.toLowerCase().endsWith(".pdf") ? (
+          <iframe src={url} className="w-full min-h-[60vh]" title={title} />
         ) : (
-          <img src={url} alt={title} className="max-w-full h-auto object-contain shadow-lg" />
+          // max-h-[70vh] limits the image height to 70% of the viewport height
+          <img src={url} alt={title} className="max-w-full h-auto max-h-[70vh] object-contain shadow-lg" />
         )}
       </div>
-      <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+      
+      <div className="px-6 py-4 border-t border-gray-200 flex justify-end shrink-0">
         <button onClick={onClose} className="px-6 py-2 bg-gray-200 text-gray-600 rounded-full font-semibold hover:bg-gray-300 transition">
           Close
         </button>
@@ -32,17 +37,17 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
   const [modalData, setModalData] = useState(null);
   const baseUrl = import.meta.env.VITE_SERVER_URL?.replace(/\/$/, "");
 
-  // rowData এ userId আছে (dashboard approval requests থেকে আসে)
   const userId = rowData?.userId || rowData?.id;
-
   const { data, isLoading } = useGetUserByIdQuery(userId, { skip: !userId });
   const [approveUser, { isLoading: isApproving }] = useApproveUserMutation();
   const [rejectUser,  { isLoading: isRejecting  }] = useRejectUserMutation();
 
-  const user = data?.data || {};
+  const user    = data?.data || {};
   const profile = user?.jobSeekerProfile || user?.employerProfile || {};
-  const isJobSeeker = !!user?.jobSeekerProfile;
-  const isEmployer  = user?.role === "EMPLOYER" || user?.role === "COMPANY";
+
+  const isJobSeeker = user?.role === "JOB_SEEKER";
+  const isEmployer  = user?.role === "EMPLOYER";
+  const isCompany   = user?.role === "COMPANY";
 
   const imgUrl = (path) =>
     path && !path.includes("undefined") ? `${baseUrl}${path}` : null;
@@ -97,65 +102,76 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        {/* Column 1: Profile Info */}
-        <div className="lg:col-span-4 space-y-6 lg:border-r border-dashed border-gray-200 lg:pr-8">
-          <h4 className="font-bold text-gray-800 mb-4 text-sm">• Profile Information</h4>
+        {/* ── Column 1: Profile Info ── */}
+        <div className="lg:col-span-4 space-y-5 lg:border-r border-dashed border-gray-200 lg:pr-8">
+          <h4 className="font-bold text-gray-800 text-sm">• Profile Information</h4>
 
-          <div className="mb-6">
+          <div>
             <p className="text-xs text-gray-500 mb-2">Profile Picture</p>
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-green-50 shadow-sm">
               <img src={profilePic} alt="Profile" className="w-full h-full object-cover" />
             </div>
           </div>
 
-          <div className="space-y-4 text-sm">
-            <InfoRow label="Full Name"  value={profile?.fullName} />
-            <InfoRow label="Email"      value={user?.email} />
-            <InfoRow label="Phone Number" value={profile?.phone} />
+          <div className="space-y-3 text-sm">
+            <InfoRow label="Full Name" value={profile?.fullName} />
+            <InfoRow label="Email"     value={user?.email} />
+            <InfoRow label="Phone"     value={profile?.phone} />
+            <InfoRow label="Location"  value={profile?.location} />
 
+            {/* Job Seeker specific */}
             {isJobSeeker && (
               <>
-                <InfoRow label="Date Of Birth" value={profile?.dob ? new Date(profile.dob).toLocaleDateString() : null} />
-                <InfoRow label="Gender"        value={profile?.gender} />
-                <InfoRow label="Location"      value={profile?.location} />
-                <InfoRow label="Preferred Job Categories" value={profile?.preferredJobCategories?.map(c => c.name).join(", ")} />
+                <InfoRow label="Date of Birth"   value={profile?.dob ? new Date(profile.dob).toLocaleDateString() : null} />
+                <InfoRow label="Gender"          value={profile?.gender} />
                 <InfoRow label="Experience Level" value={profile?.experienceLevel} />
+                <InfoRow label="Preferred Categories" value={profile?.preferredJobCategories?.map(c => c.name).join(", ")} />
               </>
             )}
 
+            {/* Employer specific */}
             {isEmployer && (
               <>
                 <InfoRow label="Company Name" value={profile?.companyName} />
-                <InfoRow label="Location"     value={profile?.location} />
                 <InfoRow label="Website"      value={profile?.website} />
-                <InfoRow label="Tax ID"       value={profile?.taxId} />
-                <InfoRow label="Business Reg" value={profile?.businessRegCertId} />
               </>
             )}
 
+            {/* Company specific */}
+            {isCompany && (
+              <>
+                <InfoRow label="Company Name"         value={profile?.companyName} />
+                <InfoRow label="Website"              value={profile?.website} />
+                <InfoRow label="Business Reg Cert ID" value={profile?.businessRegCertId} />
+                <InfoRow label="Tax ID"               value={profile?.taxId} />
+                <InfoRow label="Authorized Rep ID"    value={profile?.authorizedRepId} />
+              </>
+            )}
+
+            {/* About text for all roles if it exists */}
             {profile?.about && (
-              <div className="pt-2">
-                <span className="text-gray-400 block text-xs mb-1">Overview:</span>
+              <div className="pt-1">
+                <span className="text-gray-400 block text-xs mb-1">About:</span>
                 <p className="text-gray-700 leading-relaxed">{profile.about}</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Column 2: Education & Professional */}
-        <div className="lg:col-span-4 space-y-8 lg:border-r border-dashed border-gray-200 lg:pr-8">
+        {/* ── Column 2: Professional / Education / Experience / About ── */}
+        <div className="lg:col-span-4 space-y-6 lg:border-r border-dashed border-gray-200 lg:pr-8">
 
-          {/* Job Seeker: Education + Experience + Skills */}
+          {/* Job Seeker */}
           {isJobSeeker && (
             <>
               {profile?.education?.length > 0 && (
                 <div>
-                  <h4 className="font-bold text-gray-800 mb-4 text-sm">• Educational Details</h4>
+                  <h4 className="font-bold text-gray-800 mb-3 text-sm">• Educational Details</h4>
                   {profile.education.map((edu, i) => (
-                    <div key={i} className="space-y-3 text-sm mb-4">
-                      <InfoRow label="Qualification" value={edu.degreeName} />
-                      <InfoRow label="Institution"   value={edu.institution} />
-                      <InfoRow label="Started Year"  value={edu.startDate ? new Date(edu.startDate).getFullYear() : null} />
+                    <div key={i} className="space-y-2 text-sm mb-4 pb-4 border-b border-gray-100 last:border-0">
+                      <InfoRow label="Qualification"   value={edu.degreeName} />
+                      <InfoRow label="Institution"     value={edu.institution} />
+                      <InfoRow label="Started Year"    value={edu.startDate    ? new Date(edu.startDate).getFullYear()    : null} />
                       <InfoRow label="Completion Year" value={edu.completionYear ? new Date(edu.completionYear).getFullYear() : null} />
                     </div>
                   ))}
@@ -163,13 +179,15 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
               )}
 
               <div>
-                <h4 className="font-bold text-gray-800 mb-4 text-sm">• Professional Details</h4>
+                <h4 className="font-bold text-gray-800 mb-3 text-sm">• Professional Details</h4>
 
                 {profile?.resumeUrl && (
-                  <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 mb-6 shadow-sm">
-                    <span className="text-xs text-gray-500 font-medium">Upload CV / Resume:</span>
-                    <button onClick={() => setModalData({ url: imgUrl(profile.resumeUrl), title: "Resume" })}
-                      className="px-5 py-1.5 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 mb-4 shadow-sm">
+                    <span className="text-xs text-gray-500 font-medium">CV / Resume:</span>
+                    <button
+                      onClick={() => setModalData({ url: imgUrl(profile.resumeUrl), title: "Resume" })}
+                      className="px-5 py-1.5 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
                       View Resume
                     </button>
                   </div>
@@ -177,25 +195,24 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
 
                 {profile?.experience?.length > 0 && (
                   <>
-                    <h5 className="text-sm text-gray-600 font-semibold mb-3">Experience</h5>
+                    <p className="text-sm text-gray-700 font-semibold mb-2">Experience</p>
                     {profile.experience.map((exp, i) => (
-                      <div key={i} className="space-y-3 text-sm mb-4">
+                      <div key={i} className="space-y-2 text-sm mb-4 pb-4 border-b border-gray-100 last:border-0">
                         <InfoRow label="Designation"    value={exp.designation} />
-                        <InfoRow label="Company Name"   value={exp.companyName} />
-                        <InfoRow label="Started Year"   value={exp.startDate ? new Date(exp.startDate).getFullYear() : null} />
-                        <InfoRow label="Completion Year" value={exp.endDate ? new Date(exp.endDate).getFullYear() : null} />
-                        <InfoRow label="Current"        value={exp.isCurrent ? "Yes" : "No"} />
+                        <InfoRow label="Company"        value={exp.companyName} />
+                        <InfoRow label="Started"        value={exp.startDate ? new Date(exp.startDate).getFullYear() : null} />
+                        <InfoRow label="Ended"          value={exp.isCurrent ? "Present" : exp.endDate ? new Date(exp.endDate).getFullYear() : null} />
                       </div>
                     ))}
                   </>
                 )}
 
                 {profile?.skills?.length > 0 && (
-                  <div className="mt-4">
-                    <p className="text-sm text-gray-800 font-medium mb-3">Skills</p>
-                    <div className="flex flex-wrap gap-3">
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-700 font-semibold mb-2">Skills</p>
+                    <div className="flex flex-wrap gap-2">
                       {profile.skills.map((skill, i) => (
-                        <span key={i} className="bg-[#F3F4F6] text-gray-600 px-6 py-2 rounded-md text-xs font-medium">{skill}</span>
+                        <span key={i} className="bg-[#F3F4F6] text-gray-600 px-4 py-1.5 rounded-md text-xs font-medium">{skill}</span>
                       ))}
                     </div>
                   </div>
@@ -204,91 +221,65 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
             </>
           )}
 
-          {/* Employer/Company: About */}
-          {isEmployer && profile?.about && (
-            <div>
-              <h4 className="font-bold text-gray-800 mb-4 text-sm">• About</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">{profile.about}</p>
-            </div>
+          {/* Employer / Company (If you want to show anything else in column 2, like expanded About or other details. Kept simple based on your design) */}
+          {(isEmployer || isCompany) && (
+             <div>
+                <h4 className="font-bold text-gray-800 mb-3 text-sm">• Additional Details</h4>
+                <p className="text-sm text-gray-500">
+                  {isCompany ? "Company information is listed in the profile section." : "Employer information is listed in the profile section."}
+                </p>
+             </div>
           )}
         </div>
 
-        {/* Column 3: Verification */}
-        <div className="lg:col-span-4 flex flex-col h-full">
+        {/* ── Column 3: Verification ── */}
+        <div className="lg:col-span-4 flex flex-col">
           <h4 className="font-bold text-gray-800 mb-4 text-sm">• Verification</h4>
 
-          <div className="space-y-5 flex-1">
+          <div className="space-y-4 flex-1">
+
+            {/* Job Seeker verification docs */}
             {isJobSeeker && (
               <>
-                <VerificationItem
-                  label="Government Id card (Front):"
-                  btnText="View Front"
-                  url={imgUrl(profile?.idCardFront)}
-                  onView={(url) => setModalData({ url, title: "ID Card Front" })}
-                />
-                <VerificationItem
-                  label="Government Id card (Back):"
-                  btnText="View Back"
-                  url={imgUrl(profile?.idCardBack)}
-                  onView={(url) => setModalData({ url, title: "ID Card Back" })}
-                />
-                <VerificationItem
-                  label="Captured selfie:"
-                  btnText="View Selfie"
-                  url={imgUrl(profile?.selfieImage)}
-                  onView={(url) => setModalData({ url, title: "Selfie" })}
-                />
+                <VerificationItem label="Government ID (Front):" btnText="View Front"  url={imgUrl(profile?.idCardFront)} onView={(url) => setModalData({ url, title: "ID Card Front" })} />
+                <VerificationItem label="Government ID (Back):"  btnText="View Back"   url={imgUrl(profile?.idCardBack)}  onView={(url) => setModalData({ url, title: "ID Card Back" })} />
+                <VerificationItem label="Captured Selfie:"       btnText="View Selfie" url={imgUrl(profile?.selfieImage)} onView={(url) => setModalData({ url, title: "Selfie" })} />
               </>
             )}
 
+            {/* Employer verification docs */}
             {isEmployer && (
               <>
-                <VerificationItem
-                  label="Government Id card (Front):"
-                  btnText="View Front"
-                  url={imgUrl(profile?.idCardFront)}
-                  onView={(url) => setModalData({ url, title: "ID Card Front" })}
-                />
-                <VerificationItem
-                  label="Government Id card (Back):"
-                  btnText="View Back"
-                  url={imgUrl(profile?.idCardBack)}
-                  onView={(url) => setModalData({ url, title: "ID Card Back" })}
-                />
-                {profile?.licenseFile && (
-                  <VerificationItem
-                    label="License File:"
-                    btnText="View License"
-                    url={imgUrl(profile?.licenseFile)}
-                    onView={(url) => setModalData({ url, title: "License" })}
-                  />
-                )}
+                <VerificationItem label="Government ID (Front):" btnText="View Front"  url={imgUrl(profile?.idCardFront)} onView={(url) => setModalData({ url, title: "ID Card Front" })} />
+                <VerificationItem label="Government ID (Back):"  btnText="View Back"   url={imgUrl(profile?.idCardBack)}  onView={(url) => setModalData({ url, title: "ID Card Back" })} />
+                <VerificationItem label="Selfie Image:"          btnText="View Selfie" url={imgUrl(profile?.selfieImage)} onView={(url) => setModalData({ url, title: "Selfie" })} />
+              </>
+            )}
+
+            {/* Company verification docs */}
+            {isCompany && (
+              <>
+                <VerificationItem label="License File:" btnText="View License" url={imgUrl(profile?.licenseFile)} onView={(url) => setModalData({ url, title: "License File" })} />
               </>
             )}
           </div>
 
-          {/* Approve / Decline */}
+          {/* Approve / Decline buttons */}
           {user?.status === "PENDING" && (
-            <div className="flex justify-end gap-4 mt-12 pt-8">
-              <button
-                onClick={handleApprove}
-                disabled={isApproving}
-                className="bg-[#E6F6EC] text-[#28C76F] px-8 py-2.5 rounded-full text-sm font-bold hover:bg-green-100 transition disabled:opacity-60"
-              >
+            <div className="flex justify-end gap-4 mt-10 pt-6 border-t border-dashed border-gray-200">
+              <button onClick={handleApprove} disabled={isApproving}
+                className="bg-[#E6F6EC] text-[#28C76F] px-8 py-2.5 rounded-full text-sm font-bold hover:bg-green-100 transition disabled:opacity-60">
                 {isApproving ? "Approving..." : "Approve"}
               </button>
-              <button
-                onClick={handleDecline}
-                disabled={isRejecting}
-                className="bg-[#FFEEEE] text-[#FF5B5B] px-8 py-2.5 rounded-full text-sm font-bold hover:bg-red-100 transition disabled:opacity-60"
-              >
+              <button onClick={handleDecline} disabled={isRejecting}
+                className="bg-[#FFEEEE] text-[#FF5B5B] px-8 py-2.5 rounded-full text-sm font-bold hover:bg-red-100 transition disabled:opacity-60">
                 {isRejecting ? "Declining..." : "Decline"}
               </button>
             </div>
           )}
 
           {user?.status && user.status !== "PENDING" && (
-            <div className="flex justify-end mt-12 pt-8">
+            <div className="flex justify-end mt-10 pt-6 border-t border-dashed border-gray-200">
               <span className={`px-6 py-2 rounded-full text-sm font-bold ${
                 user.status === "ACTIVE" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"
               }`}>
@@ -299,9 +290,9 @@ const RegistrationDetails = ({ user: rowData, onBack, onActionDone }) => {
         </div>
       </div>
 
-      {/* Image/Resume Modal */}
+      {/* File/Image Modal */}
       {modalData && (
-        <ImageModal url={modalData.url} title={modalData.title} onClose={() => setModalData(null)} />
+        <FileModal url={modalData.url} title={modalData.title} onClose={() => setModalData(null)} />
       )}
     </div>
   );
@@ -319,10 +310,8 @@ const VerificationItem = ({ label, btnText, url, onView }) => (
   <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl bg-white shadow-sm hover:shadow-md transition">
     <span className="text-xs text-gray-500 font-medium">{label}</span>
     {url ? (
-      <button
-        onClick={() => onView(url)}
-        className="px-4 py-1.5 border border-gray-200 bg-white rounded text-xs font-medium text-gray-700 hover:bg-gray-50"
-      >
+      <button onClick={() => onView(url)}
+        className="px-4 py-1.5 border border-gray-200 bg-white rounded text-xs font-medium text-gray-700 hover:bg-gray-50 transition">
         {btnText}
       </button>
     ) : (
