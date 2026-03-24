@@ -59,7 +59,7 @@ const user = res?.user;
             >
               <Input
                 placeholder="admin@admin.com"
-                className="bg-[#F3F4F6] border-none h-[50px] rounded-lg px-4"
+                className="bg-[#F3F4F6] border-none h-[50px] rounded-lg px-4 text-black"
               />
             </Form.Item>
           </div>
@@ -73,7 +73,7 @@ const user = res?.user;
             >
               <Input.Password
                 placeholder="**********"
-                className="bg-[#F3F4F6] border-none h-[50px] rounded-lg px-4"
+                className="bg-[#F3F4F6] border-none h-[50px] rounded-lg px-4 text-black"
               />
             </Form.Item>
           </div>

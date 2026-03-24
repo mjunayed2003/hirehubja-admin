@@ -3,10 +3,12 @@ import DashboardHome from "../pages/Main/DashboardHome/DashboardHome";
 import Interviews from "../pages/Main/Interviews/Interviews";
 import JobPosts from "../pages/Main/JobPosts/JobPosts";
 import PaymentsEscrow from "../pages/Main/PaymentsEscrow/PaymentsEscrow";
+import Reports from "../pages/Main/Reports/reports";
 import AboutUs from "../pages/Main/Setting/AboutUs";
 import PrivacyPolicy from "../pages/Main/Setting/PrivacyPolicy";
 import ProfilePage from "../pages/Main/Setting/ProfilePage";
 import TermsAndCondition from "../pages/Main/Setting/TermsAndCondition";
+import Subscriptions from "../pages/Main/Subscriptions/subscriptions";
 import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
 import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
 import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
@@ -55,12 +57,12 @@ export const dashboardItems = [
   {
     name: "Subscriptions",
     path: "/subscriptions",
-    element: <div>Subscriptions Page</div>,
+    element: <Subscriptions />,
   },
   {
     name: "Reviews & Reports",
     path: "/reviews",
-    element: <div>Reviews Page</div>,
+    element: <Reports />,
   },
   {
     name: "Settings",
