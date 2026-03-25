@@ -26,16 +26,13 @@ const JobPosts = () => {
   const toggleBlockStatus = async (id, isCurrentlyBlocked) => {
     try {
       if (isCurrentlyBlocked) {
-        await unblockJob(id).unwrap();
-        console.log("Unblock Success!");
+        await unblockJob(id).unwrap();;
       } else {
         await blockJob(id).unwrap();
-        console.log("Block Success!");
       }
       
       refetch();
     } catch (error) {
-      console.error("Status update failed:", error);
       alert("Something went wrong! Please check the console.");
     }
   };
