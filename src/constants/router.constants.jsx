@@ -7,9 +7,9 @@ import AboutUs from "../pages/Main/Setting/AboutUs";
 import PrivacyPolicy from "../pages/Main/Setting/PrivacyPolicy";
 import ProfilePage from "../pages/Main/Setting/ProfilePage";
 import TermsAndCondition from "../pages/Main/Setting/TermsAndCondition";
-import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
-import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
-import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
+// import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
+// import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
+// import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
 import UserManagement from "../pages/Main/Users/UserManagement";
 import Reports from "../pages/Main/Reports/reports";
 import Subscriptions from "../pages/Main/Subscriptions/subscriptions";
@@ -20,15 +20,15 @@ export const dashboardItems = [
   //   path: "/",
   //   element: <DashboardHome />,
   // },
-  {
-    name: "User Approvals",
-    rootPath: "user-approvals",
-    children: [
-      { name: "Job Seekers", path: "/user-approvals/job-seekers", element: <JobSeekerApprovals />},
-      { name: "Employers", path: "/user-approvals/employers", element: <EmployeeApprovals /> },
-      { name: "Companies", path: "/user-approvals/companies", element: <CompanyApprovals /> },
-    ],
-  },
+  // {
+  //   name: "User Approvals",
+  //   rootPath: "user-approvals",
+  //   children: [
+  //     { name: "Job Seekers", path: "/user-approvals/job-seekers", element: <JobSeekerApprovals />},
+  //     { name: "Employers", path: "/user-approvals/employers", element: <EmployeeApprovals /> },
+  //     { name: "Companies", path: "/user-approvals/companies", element: <CompanyApprovals /> },
+  //   ],
+  // },
   {
     name: "User",
     path: "/user",
