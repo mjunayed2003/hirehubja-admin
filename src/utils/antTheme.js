@@ -1,4 +1,3 @@
-import { DatePicker } from "antd";
 
 export const mainTheme = {
   token: {

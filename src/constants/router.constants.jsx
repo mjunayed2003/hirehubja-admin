@@ -1,6 +1,6 @@
 
 
-import { lazy } from "react";
+import React, { lazy } from "react";
 
 // ─── Lazy Imports ─────────────────────────────────────────────────────────────
 const DashboardHome    = lazy(() => import("../pages/Main/DashboardHome/DashboardHome"));
