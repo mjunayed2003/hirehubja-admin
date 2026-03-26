@@ -6,7 +6,7 @@ import {
     useAddCategoryMutation,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation
-} from "../../../redux/features/categoriesApi/categoriesApi";
+} from "../../../redux/features/categoriesApi/CategoriesApi";
 
 const CategoriesContent = () => {
     // API Hooks

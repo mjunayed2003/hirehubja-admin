@@ -7,7 +7,7 @@ import Highlight from "@tiptap/extension-highlight";
 import {
   useGetPageQuery,
   useUpdatePageMutation,
-} from "../../../redux/features/settingsApi/settingsApi";
+} from "../../../redux/features/settingsApi/SettingsApi";
 
 const ToolBtn = ({ active, onClick, title, children }) => (
   <button

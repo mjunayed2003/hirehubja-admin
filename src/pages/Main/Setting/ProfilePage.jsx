@@ -7,7 +7,7 @@ import {
   useGetProfileQuery, useUpdateProfileMutation,
   useChangePasswordMutation, useForgotPasswordMutation,
   useResetPasswordMutation, useVerifyOtpMutation,
-} from "../../../redux/features/Auth/authSlice";
+} from "../../../redux/features/Auth/AuthSlice";
 import toast from "react-hot-toast";
 import profile from "../../../assets/images/profile.png";
 

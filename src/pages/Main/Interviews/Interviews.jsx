@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetInterviewsQuery } from "../../../redux/features/interviewsApi/interviewsApi";
+import { useGetInterviewsQuery } from "../../../redux/features/interviewsApi/InterviewsApi";
 
 // ─── INTERVIEW DETAILS PAGE COMPONENT ─────────────────────────────
 const InterviewDetails = ({ data, onBack }) => {

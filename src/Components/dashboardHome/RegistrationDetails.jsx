@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetUserByIdQuery, useApproveUserMutation, useRejectUserMutation } from "../../redux/features/users/usersApi.js";
+import { useGetUserByIdQuery, useApproveUserMutation, useRejectUserMutation } from "../../redux/features/users/UsersApi.js";
 import defaultPic from "../../assets/images/profile.png";
 import toast from "react-hot-toast";
 

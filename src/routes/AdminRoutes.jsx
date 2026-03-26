@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentUser, selectCurrentToken, logout } from "../redux/features/Auth/authSlice";
+import { selectCurrentUser, selectCurrentToken, logout } from "../redux/features/Auth/AuthSlice";
 import { jwtDecode } from "jwt-decode";
 
 const AdminRoutes = ({ children }) => {

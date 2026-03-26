@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetJobByIdQuery } from "../../../redux/features/jobsApi/jobsApi";
+import { useGetJobByIdQuery } from "../../../redux/features/jobsApi/JobsApi";
 
 const JobDetails = ({ job, onBack }) => {
   const { data, isLoading, isError } = useGetJobByIdQuery(job?.id, {

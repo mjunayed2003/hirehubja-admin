@@ -9,7 +9,7 @@ import {
   useGetDashboardStatsQuery,
   useGetPieChartQuery,
   useGetEarningsQuery,
-} from "../../../redux/features/dashboard/dashboardApi";
+} from "../../../redux/features/dashboard/DashboardApi";
 
 const DashboardHome = () => {
   const [earningPeriod, setEarningPeriod] = useState("yearly");

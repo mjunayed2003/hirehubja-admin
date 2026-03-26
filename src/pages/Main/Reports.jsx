@@ -5,7 +5,7 @@ import {
   useGetReportsQuery, 
   useGetReportByIdQuery, 
   useResolveReportMutation 
-} from "../../redux/features/reportsApi/reportsApi";
+} from "../../redux/features/reportsApi/ReportsApi";
 
 // Report Details Modal Component
 const ReportDetailsModal = ({ reportId, onClose, onResolve }) => {

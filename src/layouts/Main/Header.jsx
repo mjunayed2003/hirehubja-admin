@@ -4,7 +4,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { RiSettings4Line } from "react-icons/ri";
 import profileImage from "../../assets/images/profile.png";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../redux/features/Auth/authSlice";
+import { selectCurrentUser } from "../../redux/features/Auth/AuthSlice";
 
 
 const Header = () => {

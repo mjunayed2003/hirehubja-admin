@@ -2,7 +2,7 @@ import { Button, Checkbox, Input } from "antd";
 import Form from "antd/es/form/Form";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useLoginMutation, setLogin } from "../../redux/features/Auth/authSlice";
+import { useLoginMutation, setLogin } from "../../redux/features/Auth/AuthSlice";
 import toast from "react-hot-toast";
 import logo from "../../assets/images/logo.svg";
 

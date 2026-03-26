@@ -6,8 +6,8 @@ import { MdArrowRight } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
 import { cn } from "../../lib/utils";
 import logo from '../../assets/images/logo.svg';
-import { logout, selectCurrentUser } from "../../redux/features/Auth/authSlice";
-import { baseApi } from "../../redux/api/baseApi";
+import { logout, selectCurrentUser } from "../../redux/features/Auth/AuthSlice";
+import { baseApi } from "../../redux/api/BaseApi";
 import toast from "react-hot-toast";
 
 const Sidebar = () => {

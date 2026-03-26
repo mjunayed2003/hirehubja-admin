@@ -5,7 +5,7 @@ import {
   useGetUsersQuery,
   useApproveUserMutation,
   useRejectUserMutation,
-} from "../../../redux/features/users/usersApi.js";
+} from "../../../redux/features/users/UsersApi.js";
 import toast from "react-hot-toast";
 
 const STATUS_OPTIONS = ["All", "PENDING", "ACTIVE", "REJECTED", "BLOCKED"];

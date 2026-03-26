@@ -3,7 +3,7 @@ import {
   useGetUsersQuery, 
   useBlockUserMutation,
   usePendingUserMutation 
-} from "../../../redux/features/users/usersApi.js";
+} from "../../../redux/features/users/UsersApi.js";
 import UserDetails from "./UserDetails";
 import toast from "react-hot-toast";
 

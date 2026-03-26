@@ -3,7 +3,7 @@ import {
   useGetJobsQuery,
   useBlockJobMutation,
   useUnblockJobMutation,
-} from "../../../redux/features/jobsApi/jobsApi";
+} from "../../../redux/features/jobsApi/JobsApi";
 import JobDetails from "./JobDetails";
 
 const JobPosts = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetDashboardInterviewsQuery } from "../../redux/features/dashboard/dashboardApi";
+import { useGetDashboardInterviewsQuery } from "../../redux/features/dashboard/DashboardApi";
 
 export default function InterviewScheduled({ onView }) {
   const { data, isLoading } = useGetDashboardInterviewsQuery({ limit: 10 });

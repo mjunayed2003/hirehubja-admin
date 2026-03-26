@@ -1,5 +1,5 @@
 // src/redux/features/interviewsApi/interviewsApi.js
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "../../api/BaseApi";
 
 export const interviewsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
