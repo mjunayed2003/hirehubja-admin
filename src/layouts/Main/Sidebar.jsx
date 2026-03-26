@@ -30,7 +30,7 @@ const Sidebar = () => {
     dispatch(logout());
     dispatch(baseApi.util.resetApiState());
     toast.success("Logged out successfully");
-    navigate("/auth/sign-in");
+    navigate("/sign-in");
   };
 
   return (

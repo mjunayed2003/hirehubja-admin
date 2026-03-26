@@ -15,24 +15,24 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <AdminRoutes >
-  
-         <Main />
-     
+
+        <Main />
+
       </AdminRoutes>
     ),
     children: routesGenerators(dashboardItems),
   },
   {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
     path: "/auth",
     element: <Auth />,
     children: [
-      // {
-      //   path: "/auth",
-      //   element: <Navigate to={"/auth/sign-in"} />,
-      // },
       {
-        path: "/auth/sign-in",
-        element: <SignIn />,
+        path: "/auth",
+        element: <Navigate to={"/sign-in"} />,
       },
       {
         path: "/auth/forgot-password",
@@ -46,12 +46,12 @@ const router = createBrowserRouter([
         path: "/auth/reset-password",
         element: <ResetPassword />,
       },
-      
+
     ],
   },
   {
     path: "*",
-      element: <NotFound />,
+    element: <NotFound />,
   },
 ]);
 
