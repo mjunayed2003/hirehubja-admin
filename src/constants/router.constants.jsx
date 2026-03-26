@@ -12,7 +12,7 @@ import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
 import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
 import UserManagement from "../pages/Main/Users/UserManagement";
 import Reports from "../pages/Main/Reports";
-import Subscriptions from "../pages/Main/Subscriptions/Subscriptions";
+// import Subscriptions from "../pages/Main/Subscriptions/subscriptions";
 
 export const dashboardItems = [
   {
@@ -54,11 +54,11 @@ export const dashboardItems = [
     path: "/categories",
     element: <CategoriesPage />,
   },
-  {
-    name: "Subscriptions",
-    path: "/subscriptions",
-    element: <Subscriptions />,
-  },
+  // {
+  //   name: "Subscriptions",
+  //   path: "/subscriptions",
+  //   element: <Subscriptions />,
+  // },
   {
     name: "Reviews & Reports",
     path: "/reviews",
