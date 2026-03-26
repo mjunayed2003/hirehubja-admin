@@ -12,7 +12,7 @@ import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
 import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
 import UserManagement from "../pages/Main/Users/UserManagement";
 import Reports from "../pages/Main/Reports";
-import Subscriptions from "../pages/Main/Subscriptions/subscriptions";
+import Subscriptions from "../pages/Main/Subscriptions/Subscriptions";
 
 export const dashboardItems = [
   {

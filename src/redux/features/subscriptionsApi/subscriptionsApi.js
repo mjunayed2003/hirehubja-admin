@@ -1,6 +1,6 @@
 import { baseApi } from "../../api/baseApi";
 
-export const subscriptionsApi = baseApi.injectEndpoints({
+export const SubscriptionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPlans: builder.query({
       query: () => `/admin/subscriptions`,
@@ -40,4 +40,4 @@ export const {
   useCreatePlanMutation,
   useUpdatePlanMutation,
   useDeletePlanMutation,
-} = subscriptionsApi;
+} = SubscriptionsApi;
