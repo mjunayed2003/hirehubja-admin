@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { baseApi } from "../../api/baseApi";
 
-// ─── localStorage থেকে safe করে initial state নাও ──────────────
 const getUserFromStorage = () => {
   try {
     const user = localStorage.getItem("user");
