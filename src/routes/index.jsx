@@ -1,24 +1,43 @@
 // src/routes/index.jsx
-// ✅ Suspense wrap করা হয়েছে lazy loading এর জন্য
-
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import Main from "../layouts/Main/Main";
 import Auth from "../layouts/Auth/Auth";
 import SignIn from "../pages/Auth/SignIn";
-import { routesGenerators } from "../utils/routesGenerators";
-import { dashboardItems } from "../constants/router.constants";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import VerifyEmail from "../pages/Auth/VerifyEmail";
 import ResetPassword from "../pages/Auth/ResetPassword";
 import AdminRoutes from "./AdminRoutes";
 import NotFound from "../pages/NotFound/NotFound";
 
-// Lazy loading এর জন্য fallback UI
-const PageLoader = () => (
+// ✅ Lazy imports এখানে রাখো
+const DashboardHome     = lazy(() => import("../pages/Main/DashboardHome/DashboardHome"));
+const JobSeekerApprovals = lazy(() => import("../pages/Main/UserApprovels/JobSeekerApprovals"));
+const EmployeeApprovals  = lazy(() => import("../pages/Main/UserApprovels/EmployeeApprovals"));
+const CompanyApprovals   = lazy(() => import("../pages/Main/UserApprovels/CompanyApprovals"));
+const UserManagement    = lazy(() => import("../pages/Main/Users/UserManagement"));
+const JobPosts          = lazy(() => import("../pages/Main/JobPosts/JobPosts"));
+const Interviews        = lazy(() => import("../pages/Main/Interviews/Interviews"));
+const PaymentsEscrow    = lazy(() => import("../pages/Main/PaymentsEscrow/PaymentsEscrow"));
+const CategoriesPage    = lazy(() => import("../pages/Main/CategoriesPage/CategoriesPage"));
+const Subscriptions     = lazy(() => import("../pages/Main/Subscriptions/Subscriptions"));
+const Reports           = lazy(() => import("../pages/Main/Reports"));
+const ProfilePage       = lazy(() => import("../pages/Main/Setting/ProfilePage"));
+const TermsAndCondition = lazy(() => import("../pages/Main/Setting/TermsAndCondition"));
+const PrivacyPolicy     = lazy(() => import("../pages/Main/Setting/PrivacyPolicy"));
+const AboutUs           = lazy(() => import("../pages/Main/Setting/AboutUs"));
+
+const Loader = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
     <div className="w-8 h-8 border-4 border-[#44B12C] border-t-transparent rounded-full animate-spin" />
   </div>
+);
+
+// ✅ Helper function
+const S = (Component) => (
+  <Suspense fallback={<Loader />}>
+    <Component />
+  </Suspense>
 );
 
 const router = createBrowserRouter([
@@ -29,41 +48,36 @@ const router = createBrowserRouter([
         <Main />
       </AdminRoutes>
     ),
-    children: routesGenerators(dashboardItems).map((route) => ({
-      ...route,
-      element: <Suspense fallback={<PageLoader />}>{route.element}</Suspense>,
-    })),
+    children: [
+      { path: "/",                              element: S(DashboardHome) },
+      { path: "/user-approvals/job-seekers",    element: S(JobSeekerApprovals) },
+      { path: "/user-approvals/employers",      element: S(EmployeeApprovals) },
+      { path: "/user-approvals/companies",      element: S(CompanyApprovals) },
+      { path: "/user",                          element: S(UserManagement) },
+      { path: "/job-posts",                     element: S(JobPosts) },
+      { path: "/interviews",                    element: S(Interviews) },
+      { path: "/payments",                      element: S(PaymentsEscrow) },
+      { path: "/categories",                    element: S(CategoriesPage) },
+      { path: "/subscriptions",                 element: S(Subscriptions) },
+      { path: "/reviews",                       element: S(Reports) },
+      { path: "/settings/profile",              element: S(ProfilePage) },
+      { path: "/settings/terms-condition",      element: S(TermsAndCondition) },
+      { path: "/settings/privacy-policy",       element: S(PrivacyPolicy) },
+      { path: "/settings/about-us",             element: S(AboutUs) },
+    ],
   },
   {
     path: "/auth",
     element: <Auth />,
     children: [
-      {
-        path: "/auth",
-        element: <Navigate to="/auth/sign-in" />,
-      },
-      {
-        path: "/auth/sign-in",
-        element: <SignIn />,
-      },
-      {
-        path: "/auth/forgot-password",
-        element: <ForgotPassword />,
-      },
-      {
-        path: "/auth/verify-email/:id",
-        element: <VerifyEmail />,
-      },
-      {
-        path: "/auth/reset-password",
-        element: <ResetPassword />,
-      },
+      { path: "/auth",              element: <Navigate to="/auth/sign-in" /> },
+      { path: "/auth/sign-in",      element: <SignIn /> },
+      { path: "/auth/forgot-password", element: <ForgotPassword /> },
+      { path: "/auth/verify-email/:id", element: <VerifyEmail /> },
+      { path: "/auth/reset-password",  element: <ResetPassword /> },
     ],
   },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
+  { path: "*", element: <NotFound /> },
 ]);
 
 export default router;
