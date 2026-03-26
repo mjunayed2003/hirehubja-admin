@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../redux/features/Auth/AuthSlice";
-import { useGetProfileQuery } from "../../redux/features/Auth/AuthSlice";
-import ThemeProvider from "./ThemeProvider";
+// import React, { useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setLoading } from "../../redux/features/Auth/AuthSlice";
+// import { useGetProfileQuery } from "../../redux/features/Auth/AuthSlice";
+// import ThemeProvider from "./ThemeProvider";
 
-const AuthProvider = ({ children }) => {
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token);
+// const AuthProvider = ({ children }) => {
+//   const dispatch = useDispatch();
+//   const token = useSelector((state) => state.auth.token);
 
-  const { isLoading } = useGetProfileQuery(undefined, {
-    skip: !token,
-  });
+//   const { isLoading } = useGetProfileQuery(undefined, {
+//     skip: !token,
+//   });
 
-  useEffect(() => {
+//   useEffect(() => {
 
-    if (!token) {
-      dispatch(setLoading(false));
-    }
-  }, [token, dispatch]);
+//     if (!token) {
+//       dispatch(setLoading(false));
+//     }
+//   }, [token, dispatch]);
 
-  return <ThemeProvider>{children}</ThemeProvider>;
-};
+//   return <ThemeProvider>{children}</ThemeProvider>;
+// };
 
-export default AuthProvider;
+// export default AuthProvider;

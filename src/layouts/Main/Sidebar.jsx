@@ -1,7 +1,11 @@
+// src/layouts/Main/Sidebar.jsx
+// ✅ dashboardItems এর বদলে sidebarItems import করা হয়েছে
+// ✅ JSX/component dependency সরানো হয়েছে
+
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { dashboardItems } from "../../constants/router.constants";
+import { sidebarItems } from "../../constants/sidebar.constants";
 import { MdArrowRight } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
 import { cn } from "../../lib/utils";
@@ -18,7 +22,7 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState("");
 
   useEffect(() => {
-    const activeItem = dashboardItems.find(item =>
+    const activeItem = sidebarItems.find(item =>
       item.rootPath && location.pathname.includes(item.rootPath)
     );
     if (activeItem) {
@@ -43,7 +47,7 @@ const Sidebar = () => {
       {/* Nav Items Container */}
       <div className="flex-1 overflow-y-auto hide-scrollbar pb-4">
         <ul className="space-y-0.5">
-          {dashboardItems.filter(item => item.name).map((item, indx) => {
+          {sidebarItems.filter(item => item.name).map((item, indx) => {
 
             const hasChildren = item.children && item.children.length > 0;
 
