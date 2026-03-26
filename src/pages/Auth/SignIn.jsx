@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useLoginMutation, setLogin } from "../../redux/features/Auth/AuthSlice";
 import toast from "react-hot-toast";
-import logo from "../../assets/images/logo.svg";
+import logo from "../../assets/images/logo.svg"; // নিশ্চিত হও এই path production-এ কাজ করবে
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -12,21 +12,32 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
 
+  // Redirect path after login
   const from = location.state?.from || "/";
 
-const onFinish = async (values) => {
-  try {
-    const res = await login(values).unwrap();
-    
-const token = res?.access_token;
-const user = res?.user;
-    
-    dispatch(setLogin({ user, token }));
-    navigate("/");
-  } catch (error) {
-    toast.error(error?.data?.message || "Login failed");
-  }
-};
+  const onFinish = async (values) => {
+    try {
+      // API call
+      const res = await login(values).unwrap();
+
+      const token = res?.access_token;
+      const user = res?.user;
+
+      if (!token || !user) {
+        toast.error("Invalid response from server");
+        return;
+      }
+
+      // Save in Redux
+      dispatch(setLogin({ user, token }));
+
+      // Redirect
+      navigate(from, { replace: true });
+    } catch (error) {
+      // Handle network or validation errors
+      toast.error(error?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center bg-[#D6F8D6]">
@@ -40,13 +51,22 @@ const user = res?.user;
           paddingRight: "54px",
         }}
       >
+        {/* Logo and header */}
         <div className="text-center w-full mb-8">
           <img src={logo} alt="HireHubJA" className="h-[150px] mx-auto mb-4 object-contain" />
           <h2 className="text-[30px] font-bold text-gray-900 mb-2">Login to Account</h2>
           <p className="text-[#6B7280] text-[15px]">Please enter your email and password to continue</p>
         </div>
 
-        <Form name="login_form" layout="vertical" requiredMark={false} onFinish={onFinish} className="w-full">
+        {/* Form */}
+        <Form
+          name="login_form"
+          layout="vertical"
+          requiredMark={false}
+          onFinish={onFinish}
+          className="w-full"
+        >
+          {/* Email */}
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Email address</label>
             <Form.Item
@@ -64,6 +84,7 @@ const user = res?.user;
             </Form.Item>
           </div>
 
+          {/* Password */}
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Password</label>
             <Form.Item
@@ -78,12 +99,14 @@ const user = res?.user;
             </Form.Item>
           </div>
 
+          {/* Remember me */}
           <div className="flex justify-between items-center mb-10 mt-6">
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox className="text-gray-500">Remember Password</Checkbox>
             </Form.Item>
           </div>
 
+          {/* Submit */}
           <Form.Item className="mb-0">
             <Button
               htmlType="submit"
