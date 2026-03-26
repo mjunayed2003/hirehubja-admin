@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../redux/features/Auth/authSlice";
-import { useGetProfileQuery } from "../../redux/features/Auth/authApi";
+import { setLoading } from "../../redux/features/Auth/AuthSlice";
+import { useGetProfileQuery } from "../../redux/features/Auth/AuthSlice";
 import ThemeProvider from "./ThemeProvider";
 
 const AuthProvider = ({ children }) => {

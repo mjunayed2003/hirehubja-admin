@@ -17,11 +17,11 @@ const AdminRoutes = ({ children }) => {
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
         dispatch(logout());
-        return <Navigate to="/sign-in" state={{ from: location.pathname }} replace />;
+        return <Navigate to="/auth/sign-in" state={{ from: location.pathname }} replace />;
       }
     } catch (error) {
       dispatch(logout());
-      return <Navigate to="/sign-in" state={{ from: location.pathname }} replace />;
+      return <Navigate to="/auth/sign-in" state={{ from: location.pathname }} replace />;
     }
   }
 
@@ -29,7 +29,7 @@ const AdminRoutes = ({ children }) => {
     return children;
   }
 
-  return <Navigate to="/sign-in" state={{ from: location.pathname }} replace />;
+  return <Navigate to="/auth/sign-in" state={{ from: location.pathname }} replace />;
 };
 
 export default AdminRoutes;
