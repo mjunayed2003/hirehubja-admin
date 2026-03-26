@@ -1,6 +1,6 @@
 import { baseApi } from "../../api/BaseApi";
 
-export const SubscriptionsApi = baseApi.injectEndpoints({
+export const subscriptionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPlans: builder.query({
       query: () => `/admin/subscriptions`,
@@ -33,11 +33,13 @@ export const SubscriptionsApi = baseApi.injectEndpoints({
       invalidatesTags: ["subscriptions"],
     }),
   }),
+  overrideExisting: false,
 });
 
+// Auto-generated hooks
 export const {
   useGetPlansQuery,
   useCreatePlanMutation,
   useUpdatePlanMutation,
   useDeletePlanMutation,
-} = SubscriptionsApi;
+} = subscriptionsApi;

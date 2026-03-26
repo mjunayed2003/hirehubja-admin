@@ -6,7 +6,7 @@ import {
   useCreatePlanMutation,
   useUpdatePlanMutation,
   useDeletePlanMutation,
-} from "../../../redux/features/subscriptionsApi/subscriptionsApi";
+} from "../../../redux/features/subscriptionsApi/subscriptionsApi.js";
 
 const  Subscriptions = () => {
   // API Hooks
