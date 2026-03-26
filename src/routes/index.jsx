@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     children: routesGenerators(dashboardItems),
   },
   {
-    path: "/auth",
+    path: "/",
     element: <Auth />,
     children: [
       {
