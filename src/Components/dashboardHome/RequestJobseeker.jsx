@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGetApprovalRequestsQuery } from "../../redux/features/dashboard/dashboardApi";
-import { useApproveUserMutation, useRejectUserMutation } from "../../redux/features/users/usersApi";
+import { useApproveUserMutation, useRejectUserMutation } from "../../redux/features/users/usersApi.js";
 import toast from "react-hot-toast";
 
 export default function RegistrationApprovalRequests({ onView }) {

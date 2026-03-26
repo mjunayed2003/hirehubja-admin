@@ -3,8 +3,8 @@ import {
   useGetUsersQuery, 
   useBlockUserMutation,
   usePendingUserMutation 
-} from "../../../redux/features/users/usersApi";
-import UserDetails from "./userDetails";
+} from "../../../redux/features/users/usersApi.js";
+import UserDetails from "./UserDetails";
 import toast from "react-hot-toast";
 
 const UserManagement = () => {

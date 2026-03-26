@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetUserByIdQuery } from "../../../redux/features/users/usersApi";
+import { useGetUserByIdQuery } from "../../../redux/features/users/usersApi.js";
 
 // ─── Image/File Modal ─────────────────────────────────────────────────
 const FileModal = ({ url, title, onClose }) => (
