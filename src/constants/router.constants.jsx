@@ -1,33 +1,36 @@
+import React from "react";
 
-
-import { lazy } from "react";
-
-export const DashboardHome = lazy(() => import("../pages/Main/DashboardHome/DashboardHome"));
-export const JobSeekerApprovals = lazy(() => import("../pages/Main/UserApprovels/JobSeekerApprovals"));
-export const EmployeeApprovals = lazy(() => import("../pages/Main/UserApprovels/EmployeeApprovals"));
-export const CompanyApprovals = lazy(() => import("../pages/Main/UserApprovels/CompanyApprovals"));
-export const UserManagement = lazy(() => import("../pages/Main/Users/UserManagement"));
-export const JobPosts = lazy(() => import("../pages/Main/JobPosts/JobPosts"));
-export const Interviews = lazy(() => import("../pages/Main/Interviews/Interviews"));
-export const PaymentsEscrow = lazy(() => import("../pages/Main/PaymentsEscrow/PaymentsEscrow"));
-export const CategoriesPage = lazy(() => import("../pages/Main/CategoriesPage/CategoriesPage"));
-export const Subscriptions = lazy(() => import("../pages/Main/Subscriptions/Subscriptions"));
-export const Reports = lazy(() => import("../pages/Main/Reports"));
-export const ProfilePage = lazy(() => import("../pages/Main/Setting/ProfilePage"));
-export const TermsAndCondition = lazy(() => import("../pages/Main/Setting/TermsAndCondition"));
-export const PrivacyPolicy = lazy(() => import("../pages/Main/Setting/PrivacyPolicy"));
-export const AboutUs = lazy(() => import("../pages/Main/Setting/AboutUs"));
+// ─── Standard Imports ──────────────────────────────────
+import DashboardHome from "../pages/Main/DashboardHome/DashboardHome";
+import JobSeekerApprovals from "../pages/Main/UserApprovels/JobSeekerApprovals";
+import EmployeeApprovals from "../pages/Main/UserApprovels/EmployeeApprovals";
+import CompanyApprovals from "../pages/Main/UserApprovels/CompanyApprovals";
+import UserManagement from "../pages/Main/Users/UserManagement";
+import JobPosts from "../pages/Main/JobPosts/JobPosts";
+import Interviews from "../pages/Main/Interviews/Interviews";
+import PaymentsEscrow from "../pages/Main/PaymentsEscrow/PaymentsEscrow";
+import CategoriesPage from "../pages/Main/CategoriesPage/CategoriesPage";
+import Subscriptions from "../pages/Main/Subscriptions/Subscriptions";
+import Reports from "../pages/Main/Reports";
+import ProfilePage from "../pages/Main/Setting/ProfilePage";
+import TermsAndCondition from "../pages/Main/Setting/TermsAndCondition";
+import PrivacyPolicy from "../pages/Main/Setting/PrivacyPolicy";
+import AboutUs from "../pages/Main/Setting/AboutUs";
 
 // ─── Route Config ─────────────────────────────────────────────────────────────
-export const dashboardItems = [
-  { name: "Dashboard", path: "/", component: "DashboardHome" },
+export default dashboardItems =[
+  { 
+    name: "Dashboard", 
+    path: "/", 
+    element: <DashboardHome /> 
+  },
   {
     name: "User Approvals",
     rootPath: "user-approvals",
-    children: [
-      { name: "Job Seekers", path: "/user-approvals/job-seekers", component: "JobSeekerApprovals" },
-      { name: "Employers", path: "/user-approvals/employers", component: "EmployeeApprovals" },
-      { name: "Companies", path: "/user-approvals/companies", component: "CompanyApprovals" },
+    children:[
+      { name: "Job Seekers", path: "/user-approvals/job-seekers", element: <JobSeekerApprovals /> },
+      { name: "Employers",   path: "/user-approvals/employers",   element: <EmployeeApprovals /> },
+      { name: "Companies",   path: "/user-approvals/companies",   element: <CompanyApprovals /> },
     ],
   },
   {
@@ -68,11 +71,11 @@ export const dashboardItems = [
   {
     name: "Settings",
     rootPath: "settings",
-    children: [
-      { name: "Profile", path: "/settings/profile", element: <ProfilePage /> },
+    children:[
+      { name: "Profile",           path: "/settings/profile",         element: <ProfilePage /> },
       { name: "Terms & Condition", path: "/settings/terms-condition", element: <TermsAndCondition /> },
-      { name: "Privacy Policy", path: "/settings/privacy-policy", element: <PrivacyPolicy /> },
-      { name: "About Us", path: "/settings/about-us", element: <AboutUs /> },
+      { name: "Privacy Policy",    path: "/settings/privacy-policy",  element: <PrivacyPolicy /> },
+      { name: "About Us",          path: "/settings/about-us",        element: <AboutUs /> },
     ],
   },
 ];
