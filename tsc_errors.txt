@@ -1,0 +1,61 @@
+src/Components/dashboardHome/EarningsChart.tsx(59,19): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Props): Area', gave the following error.
+    Type '"amount"' is not assignable to type 'CurveType'.
+  Overload 2 of 2, '(props: Props, context: any): Area', gave the following error.
+    Type '"amount"' is not assignable to type 'CurveType'.
+src/lib/Providers/ThemeProvider.tsx(5,26): error TS2322: Type '{ token: { colorPrimary: string; colorInfo: string; }; components: { Button: { colorLinkHover: string; controlHeightLG: number; borderRadiusLG: number; borderRadius: number; primaryShadow: string; }; Input: { ...; }; DatePicker: { ...; }; Select: { ...; }; Table: { ...; }; }; }' is not assignable to type 'ThemeConfig'.
+  The types of 'components.Select' are incompatible between these types.
+    Type '{ controlHeightLG: number; borderRadiusLG: string; colorTextPlaceholder: string; }' is not assignable to type 'Partial<ComponentToken> & Partial<AliasToken> & { algorithm?: boolean | MappingAlgorithm | MappingAlgorithm[]; }'.
+      Type '{ controlHeightLG: number; borderRadiusLG: string; colorTextPlaceholder: string; }' is not assignable to type 'Partial<AliasToken>'.
+        Types of property 'borderRadiusLG' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+src/pages/Auth/ForgotPassword.tsx(63,19): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ForgotPassword.tsx(75,20): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ForgotPassword.tsx(78,17): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ForgotPassword.tsx(87,18): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(76,23): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(85,24): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(90,23): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(102,24): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(105,21): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/ResetPassword.tsx(114,22): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(72,19): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(84,20): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(90,19): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(99,20): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(104,19): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(106,20): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(110,17): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/SignIn.tsx(119,18): error TS2339: Property 'Item' does not exist on type '(<Values = any>(props: FormProps<Values> & { children?: ReactNode; } & RefAttributes<FormRef<Values>>) => ReactElement<any, string | JSXElementConstructor<...>>) & Pick<...>'.
+src/pages/Auth/VerifyEmail.tsx(136,15): error TS2322: Type '{ value: string; onChange: Dispatch<SetStateAction<string>>; numInputs: number; renderSeparator: Element; renderInput: (props: Required<Pick<InputHTMLAttributes<HTMLInputElement>, "value" | ... 9 more ... | "autoComplete"> & { ...; }>) => Element; inputStyle: { ...; }; focusStyle: { ...; }; }' is not assignable to type 'IntrinsicAttributes & OTPInputProps'.
+  Property 'focusStyle' does not exist on type 'IntrinsicAttributes & OTPInputProps'.
+src/pages/Main/CategoriesPage/CategoriesPage.tsx(13,49): error TS2554: Expected 1-2 arguments, but got 0.
+src/pages/Main/DashboardHome/DashboardHome.tsx(19,31): error TS2554: Expected 1-2 arguments, but got 0.
+src/pages/Main/DashboardHome/DashboardHome.tsx(20,29): error TS2554: Expected 1-2 arguments, but got 0.
+src/pages/Main/DashboardHome/DashboardHome.tsx(68,10): error TS2741: Property 'onActionDone' is missing in type '{ user: any; onBack: () => void; }' but required in type '{ user: any; onBack: any; onActionDone: any; }'.
+src/pages/Main/JobPosts/JobDetails.tsx(94,28): error TS2339: Property 'src' does not exist on type 'EventTarget'.
+src/pages/Main/Reports.tsx(185,21): error TS2322: Type 'string' is not assignable to type 'number'.
+src/pages/Main/Reports.tsx(189,21): error TS2322: Type 'string' is not assignable to type 'number'.
+src/pages/Main/Setting/ProfilePage.tsx(29,44): error TS2554: Expected 1-2 arguments, but got 0.
+src/pages/Main/Setting/ProfilePage.tsx(129,16): error TS2741: Property 'placeholder' is missing in type '{ label: string; name: string; value: string; isEditing: boolean; onChange: (e: any) => void; }' but required in type '{ label: any; name: any; value: any; isEditing: any; onChange: any; placeholder: any; }'.
+src/pages/Main/Setting/ProfilePage.tsx(130,16): error TS2741: Property 'placeholder' is missing in type '{ label: string; name: string; value: string; isEditing: boolean; onChange: (e: any) => void; }' but required in type '{ label: any; name: any; value: any; isEditing: any; onChange: any; placeholder: any; }'.
+src/pages/Main/Subscriptions/Subscriptions.tsx(13,42): error TS2554: Expected 1-2 arguments, but got 0.
+src/pages/Main/Users/UserManagement.tsx(60,9): error TS2322: Type '{ user: any; onBack: () => void; onActionDone: () => QueryActionCreatorResult<QueryDefinition<any, BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, FetchBaseQueryMeta>, "auth" | ... 6 more ... | "profile", any, "baseApi", any>>; }' is not assignable to type 'IntrinsicAttributes & { user: any; onBack: any; }'.
+  Property 'onActionDone' does not exist on type 'IntrinsicAttributes & { user: any; onBack: any; }'.
+src/redux/features/dashboard/DashboardApi.ts(26,15): error TS2322: Type '{}' is not assignable to type 'QueryArg'.
+  'QueryArg' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+src/redux/features/dashboard/DashboardApi.ts(33,15): error TS2322: Type '{}' is not assignable to type 'QueryArg'.
+  'QueryArg' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+src/redux/features/reportsApi/ReportsApi.ts(15,22): error TS2322: Type '"reports"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+src/redux/features/reportsApi/ReportsApi.ts(20,7): error TS2322: Type '(result: any, error: FetchBaseQueryError, id: any) => { type: "reports"; id: any; }[]' is not assignable to type 'ResultDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile", any, any, FetchBaseQueryError, FetchBaseQueryMeta>'.
+  Type '(result: any, error: FetchBaseQueryError, id: any) => { type: "reports"; id: any; }[]' is not assignable to type 'GetResultDescriptionFn<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile", any, any, FetchBaseQueryError, FetchBaseQueryMeta>'.
+    Type '{ type: "reports"; id: any; }[]' is not assignable to type 'TagDescriptionArray<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+      Type '{ type: "reports"; id: any; }' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+        Type '{ type: "reports"; id: any; }' is not assignable to type 'FullTagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+          Types of property 'type' are incompatible.
+            Type '"reports"' is not assignable to type '"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile"'.
+src/redux/features/reportsApi/ReportsApi.ts(28,25): error TS2322: Type '"reports"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+src/redux/features/subscriptionsApi/subscriptionsApi.ts(7,22): error TS2322: Type '"subscriptions"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+src/redux/features/subscriptionsApi/subscriptionsApi.ts(16,25): error TS2322: Type '"subscriptions"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+src/redux/features/subscriptionsApi/subscriptionsApi.ts(25,25): error TS2322: Type '"subscriptions"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
+src/redux/features/subscriptionsApi/subscriptionsApi.ts(33,25): error TS2322: Type '"subscriptions"' is not assignable to type 'TagDescription<"auth" | "settings" | "dashboard" | "users" | "jobs" | "categories" | "interviews" | "profile">'.
