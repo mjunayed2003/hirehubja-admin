@@ -3,20 +3,45 @@ import { Form } from "antd";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../../assets/images/logo.svg";
+import { useForgotPasswordMutation } from "../../redux/features/Auth/AuthSlice";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const isLoading = false;
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-  const onFinish = async (values) => {
+  const onFinish = async (values: any) => {
+    // Restrict forgot password to admin emails only
+    if (values.email !== "admin@gmail.com" && values.email !== "admin@admin.com") {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "Only the admin email can request a password reset.",
+      });
+      return;
+    }
+
     try {
+      const res: any = await forgotPassword({ email: values.email, role: "admin" }).unwrap();
+      console.log("Forgot password response:", res);
+      
+      if (res?.data?.token || res?.token) {
+        sessionStorage.setItem("tempToken", res?.tempToken || res?.data?.tempToken);
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: res?.message || "OTP sent to your email.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
 
       navigate(`/auth/verify-email/${values.email}`);
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "Failed!!",
-        text: (error.message || error?.data?.message || "Something went wrong.") + " Please try again later."
+        text: (error?.data?.message || error?.message || "Something went wrong.") + " Please try again later."
       });
     }
   };

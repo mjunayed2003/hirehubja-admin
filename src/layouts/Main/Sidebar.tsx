@@ -1,6 +1,5 @@
 // src/layouts/Main/Sidebar.jsx
-// ✅ dashboardItems এর বদলে sidebarItems import করা হয়েছে
-// ✅ JSX/component dependency সরানো হয়েছে
+
 
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";

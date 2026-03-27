@@ -1,29 +1,45 @@
 import { Button, Input } from "antd";
 import { Form } from "antd";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../../assets/images/logo.svg";
+import { useResetPasswordMutation } from "../../redux/features/Auth/AuthSlice";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const isLoading = false;
+  const location = useLocation();
+  const { email, otp } = location.state || {};
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const onFinish = async (values) => {
+  const onFinish = async (values: any) => {
     try {
       if (values.password !== values.confirmPassword) {
         throw new Error("Passwords do not match!");
       }
 
+      const resetToken = location.state?.resetToken || sessionStorage.getItem("resetToken");
 
+      const payload = {
+        email,
+        otp,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        token: resetToken,
+      };
+
+      await resetPassword({ resetToken, newPassword: values.password }).unwrap();
+
+      sessionStorage.removeItem("resetToken");
+      sessionStorage.removeItem("otpExpire");
       setShowSuccess(true);
-
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "Failed !!",
-        text: (error.message || "Something went wrong.") + " Please try again.",
+        text: error?.data?.message || error?.message || "Something went wrong. Please try again.",
       });
     }
   };

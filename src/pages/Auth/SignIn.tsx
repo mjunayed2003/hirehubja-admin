@@ -103,6 +103,9 @@ const SignIn = () => {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox className="text-gray-500">Remember Password</Checkbox>
             </Form.Item>
+            <a className="text-[#4CAF50] hover:text-[#43a047] text-sm font-medium" href="/auth/forgot-password">
+              Forgot Password?
+            </a>
           </div>
 
           {/* Submit */}

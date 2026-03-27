@@ -95,7 +95,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // POST /auth/forgot-password  → email পাঠালে OTP আসবে
+    // ─────────────────────────────────────────────────────
+    // FORGOT PASSWORD FLOW
+    // ─────────────────────────────────────────────────────
+
+    // Step 1 — POST /auth/forgot-password
+    // Body: { email }
+    // Response: { tempToken }
     forgotPassword: builder.mutation({
       query: (data) => ({
         url: "/auth/forgot-password",
@@ -104,22 +110,59 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // POST /auth/reset-password  → email + otp + newPassword
-    resetPassword: builder.mutation({
-      query: (data) => ({
-        url: "/auth/reset-password",
+    // Verify OTP
+    verifyForgotPasswordOtp: builder.mutation({
+      query: ({ otp, email }) => ({
+        url: "/auth/forgot-password/verify-otp",
         method: "POST",
-        body: data,
+        body: { otp, email }, // ← header বাদ, body তে email
       }),
     }),
 
-
-    // POST /auth/forgot-password/verify-otp
-    verifyOtp: builder.mutation({
-      query: (data) => ({
-        url: "/auth/forgot-password/verify-otp",
+    // Resend OTP
+    resendForgotPasswordOtp: builder.mutation({
+      query: ({ email }) => ({
+        url: "/auth/forgot-password/resend-otp",
         method: "POST",
-        body: data,
+        body: { email }, // ← একই
+      }),
+    }),
+
+    // Step 3 — POST /auth/forgot-password/reset
+    // Body: { resetToken, newPassword }
+    // Response: { success, message }
+    resetPassword: builder.mutation({
+      query: ({ resetToken, newPassword }) => ({
+        url: "/auth/forgot-password/reset",
+        method: "POST",
+        body: { resetToken, newPassword },
+      }),
+    }),
+
+    // ─────────────────────────────────────────────────────
+    // REGISTRATION OTP FLOW
+    // ─────────────────────────────────────────────────────
+
+    // POST /auth/verify-otp
+    // Header: Authorization: Bearer {{tempToken}}
+    // Body: { otp }
+    verifyOtp: builder.mutation({
+      query: ({ otp, token }) => ({
+        url: "/auth/verify-otp",
+        method: "POST",
+        body: { otp },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      }),
+    }),
+
+    // POST /auth/resend-otp
+    // Header: Authorization: Bearer {{tempToken}}
+    resendOtp: builder.mutation({
+      query: ({ token }) => ({
+        url: "/auth/resend-otp",
+        method: "POST",
+        body: {},
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       }),
     }),
 
@@ -131,7 +174,12 @@ export const {
   useGetProfileQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
+  // Forgot Password Flow
   useForgotPasswordMutation,
+  useVerifyForgotPasswordOtpMutation,
+  useResendForgotPasswordOtpMutation,
   useResetPasswordMutation,
+  // Registration OTP Flow
   useVerifyOtpMutation,
+  useResendOtpMutation,
 } = authApi;
