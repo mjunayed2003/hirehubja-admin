@@ -16,9 +16,6 @@ const ResetPassword = () => {
         throw new Error("Passwords do not match!");
       }
 
-      // API কল লজিক (প্রয়োজন হলে আনকমেন্ট করুন)
-      // const token = sessionStorage.getItem("resend-token");
-      // await resetPassword({ token, data: values }).unwrap();
 
       setShowSuccess(true);
       

@@ -10,11 +10,7 @@ const ForgotPassword = () => {
 
   const onFinish = async (values) => {
     try {
-      // API call logic (Uncomment when ready)
-      // const response = await forgotPassword(values).unwrap();
-      // sessionStorage.setItem("resend-token", response?.data?.resetPasswordToken);
-      
-      // For now, navigating as per your previous logic
+
       navigate(`/auth/verify-email/${values.email}`);
     } catch (error) {
       Swal.fire({

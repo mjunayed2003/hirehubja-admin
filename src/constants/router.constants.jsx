@@ -18,7 +18,7 @@ import PrivacyPolicy from "../pages/Main/Setting/PrivacyPolicy";
 import AboutUs from "../pages/Main/Setting/AboutUs";
 
 // ─── Route Config ─────────────────────────────────────────────────────────────
-export default dashboardItems =[
+export const dashboardItems =[
   { 
     name: "Dashboard", 
     path: "/", 
