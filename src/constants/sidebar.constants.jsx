@@ -1,6 +1,6 @@
 // src/constants/sidebar.constants.js
 
-export const sidebarItems = [
+export default sidebarItems = [
   {
     name: "Dashboard",
     path: "/",
